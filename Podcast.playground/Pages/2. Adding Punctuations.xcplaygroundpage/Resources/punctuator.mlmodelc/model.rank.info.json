@@ -1,0 +1,16 @@
+{
+  "conv1d_1\/convolution\/ExpandDims" : 4,
+  "embedding_1\/embeddings\/read" : 2,
+  "flatten_1\/Reshape" : 2,
+  "conv1d_1\/add" : 3,
+  "conv1d_1\/Reshape" : 3,
+  "conv1d_1\/convolution\/Conv2D_to_nhwc" : 4,
+  "dense_1\/MatMul" : 2,
+  "conv1d_1\/Relu" : 3,
+  "dense_1\/Softmax" : 2,
+  "embedding_1_input" : 2,
+  "conv1d_1\/convolution\/Squeeze" : 3,
+  "conv1d_1\/convolution\/Conv2D" : 4,
+  "embedding_1\/Gather" : 3,
+  "conv1d_1\/convolution\/ExpandDims_to_nchw" : 4
+}

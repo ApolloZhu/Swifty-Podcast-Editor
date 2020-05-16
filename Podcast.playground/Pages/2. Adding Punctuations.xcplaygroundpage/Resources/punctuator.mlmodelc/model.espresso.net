@@ -1,0 +1,197 @@
+{
+  "storage" : "model.espresso.weights",
+  "properties" : {
+
+  },
+  "format_version" : 200,
+  "layers" : [
+    {
+      "k" : 1,
+      "bottom" : "",
+      "n" : 1,
+      "weights" : {
+
+      },
+      "h" : 20000,
+      "nd_rank" : 2,
+      "constant_blob" : 1,
+      "top" : "embedding_1\/embeddings\/read",
+      "w" : 100,
+      "type" : "load_constant",
+      "name" : "embedding_1\/embeddings\/read"
+    },
+    {
+      "k" : 1,
+      "bottom" : "",
+      "n" : 1,
+      "weights" : {
+
+      },
+      "h" : 1,
+      "nd_rank" : 3,
+      "constant_blob" : 3,
+      "top" : "conv1d_1\/Reshape",
+      "w" : 512,
+      "type" : "load_constant",
+      "name" : "conv1d_1\/Reshape"
+    },
+    {
+      "bottom" : "embedding_1\/embeddings\/read,embedding_1_input",
+      "weights" : {
+
+      },
+      "mode" : 0,
+      "axis" : 0,
+      "top" : "embedding_1\/Gather",
+      "type" : "gather_nd",
+      "name" : "embedding_1\/Gather"
+    },
+    {
+      "size_of_axes" : 1,
+      "axes_0" : 1,
+      "bottom" : "embedding_1\/Gather",
+      "weights" : {
+
+      },
+      "nd_axis" : 0,
+      "top" : "conv1d_1\/convolution\/ExpandDims",
+      "type" : "expand_dims",
+      "name" : "conv1d_1\/convolution\/ExpandDims"
+    },
+    {
+      "axis_h" : 2,
+      "axis_w" : 1,
+      "axis_k" : 0,
+      "bottom" : "conv1d_1\/convolution\/ExpandDims",
+      "axis_n" : 3,
+      "axis_seq" : 4,
+      "weights" : {
+
+      },
+      "top" : "conv1d_1\/convolution\/ExpandDims_to_nchw",
+      "type" : "transpose",
+      "name" : "conv1d_1\/convolution\/ExpandDims_to_nchw"
+    },
+    {
+      "pad_r" : 0,
+      "fused_relu" : 0,
+      "fused_tanh" : 0,
+      "pad_fill_mode" : 0,
+      "pad_b" : 0,
+      "pad_l" : 0,
+      "top" : "conv1d_1\/convolution\/Conv2D",
+      "blob_weights" : 5,
+      "K" : 100,
+      "name" : "conv1d_1\/convolution\/Conv2D",
+      "has_batch_norm" : 0,
+      "type" : "convolution",
+      "n_groups" : 1,
+      "pad_t" : 0,
+      "has_biases" : 0,
+      "C" : 512,
+      "bottom" : "conv1d_1\/convolution\/ExpandDims_to_nchw",
+      "weights" : {
+
+      },
+      "pad_mode" : 0,
+      "Nx" : 3,
+      "pad_value" : 0,
+      "Ny" : 1,
+      "n_parallel" : 1
+    },
+    {
+      "axis_h" : 0,
+      "axis_w" : 2,
+      "axis_k" : 1,
+      "bottom" : "conv1d_1\/convolution\/Conv2D",
+      "axis_n" : 3,
+      "axis_seq" : 4,
+      "weights" : {
+
+      },
+      "top" : "conv1d_1\/convolution\/Conv2D_to_nhwc",
+      "type" : "transpose",
+      "name" : "conv1d_1\/convolution\/Conv2D_to_nhwc"
+    },
+    {
+      "size_of_axes" : 1,
+      "axes_0" : 1,
+      "bottom" : "conv1d_1\/convolution\/Conv2D_to_nhwc",
+      "weights" : {
+
+      },
+      "nd_axis" : 0,
+      "top" : "conv1d_1\/convolution\/Squeeze",
+      "type" : "squeeze",
+      "name" : "conv1d_1\/convolution\/Squeeze"
+    },
+    {
+      "alpha" : 1,
+      "bottom" : "conv1d_1\/convolution\/Squeeze,conv1d_1\/Reshape",
+      "operation" : 0,
+      "weights" : {
+
+      },
+      "fused_relu" : 0,
+      "nd_mode" : true,
+      "top" : "conv1d_1\/add",
+      "type" : "elementwise",
+      "name" : "conv1d_1\/add",
+      "beta" : 0
+    },
+    {
+      "mode" : 0,
+      "weights" : {
+
+      },
+      "top" : "conv1d_1\/Relu",
+      "type" : "activation",
+      "name" : "conv1d_1\/Relu",
+      "bottom" : "conv1d_1\/add"
+    },
+    {
+      "top" : "flatten_1\/Reshape",
+      "weights" : {
+
+      },
+      "dst_w" : 14336,
+      "dst_n" : 1,
+      "dst_nd_rank" : 2,
+      "type" : "reshape",
+      "mode" : 0,
+      "dst_h" : 1,
+      "dynamic_shape" : false,
+      "bottom" : "conv1d_1\/Relu",
+      "dst_seq" : 1,
+      "name" : "flatten_1\/Reshape",
+      "dst_k" : 1
+    },
+    {
+      "nB" : 14336,
+      "top" : "dense_1\/MatMul",
+      "has_biases" : 1,
+      "weights" : {
+
+      },
+      "nC" : 2,
+      "blob_weights" : 9,
+      "type" : "inner_product",
+      "has_relu" : 0,
+      "bottom" : "flatten_1\/Reshape",
+      "blob_biases" : 7,
+      "has_tanh" : 0,
+      "name" : "dense_1\/MatMul",
+      "has_prelu" : 0
+    },
+    {
+      "nd_axis" : -1,
+      "weights" : {
+
+      },
+      "top" : "dense_1\/Softmax",
+      "type" : "softmax_nd",
+      "name" : "dense_1\/Softmax",
+      "bottom" : "dense_1\/MatMul"
+    }
+  ]
+}

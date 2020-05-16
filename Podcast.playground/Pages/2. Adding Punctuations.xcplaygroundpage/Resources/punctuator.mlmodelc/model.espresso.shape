@@ -1,0 +1,102 @@
+{
+  "layer_shapes" : {
+    "conv1d_1\/convolution\/ExpandDims" : {
+      "k" : 1,
+      "w" : 100,
+      "n" : 1,
+      "_rank" : 4,
+      "h" : 30
+    },
+    "embedding_1\/embeddings\/read" : {
+      "k" : 1,
+      "w" : 100,
+      "n" : 1,
+      "_rank" : 2,
+      "h" : 20000
+    },
+    "flatten_1\/Reshape" : {
+      "k" : 1,
+      "w" : 14336,
+      "n" : 1,
+      "_rank" : 2,
+      "h" : 1
+    },
+    "conv1d_1\/add" : {
+      "k" : 1,
+      "w" : 512,
+      "n" : 1,
+      "_rank" : 3,
+      "h" : 28
+    },
+    "conv1d_1\/Reshape" : {
+      "k" : 1,
+      "w" : 512,
+      "n" : 1,
+      "_rank" : 3,
+      "h" : 1
+    },
+    "conv1d_1\/convolution\/Conv2D_to_nhwc" : {
+      "k" : 1,
+      "w" : 512,
+      "n" : 1,
+      "_rank" : 4,
+      "h" : 28
+    },
+    "dense_1\/MatMul" : {
+      "k" : 1,
+      "w" : 2,
+      "n" : 1,
+      "_rank" : 2,
+      "h" : 1
+    },
+    "conv1d_1\/Relu" : {
+      "k" : 1,
+      "w" : 512,
+      "n" : 1,
+      "_rank" : 3,
+      "h" : 28
+    },
+    "dense_1\/Softmax" : {
+      "k" : 1,
+      "w" : 2,
+      "n" : 1,
+      "_rank" : 2,
+      "h" : 1
+    },
+    "embedding_1_input" : {
+      "k" : 1,
+      "w" : 30,
+      "n" : 1,
+      "_rank" : 2,
+      "h" : 1
+    },
+    "conv1d_1\/convolution\/Squeeze" : {
+      "k" : 1,
+      "w" : 512,
+      "n" : 1,
+      "_rank" : 3,
+      "h" : 28
+    },
+    "conv1d_1\/convolution\/Conv2D" : {
+      "k" : 512,
+      "w" : 28,
+      "n" : 1,
+      "_rank" : 4,
+      "h" : 1
+    },
+    "embedding_1\/Gather" : {
+      "k" : 1,
+      "w" : 100,
+      "n" : 1,
+      "_rank" : 3,
+      "h" : 30
+    },
+    "conv1d_1\/convolution\/ExpandDims_to_nchw" : {
+      "k" : 100,
+      "w" : 30,
+      "n" : 1,
+      "_rank" : 4,
+      "h" : 1
+    }
+  }
+}

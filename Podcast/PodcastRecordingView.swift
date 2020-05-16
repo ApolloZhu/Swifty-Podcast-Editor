@@ -38,7 +38,7 @@ public struct PodcastRecordingView: View {
 
   var buttonDisabled: Bool {
     switch recorder.state {
-    case .canNotTranscribe(.localNotSupported), .canNotTranscribe(.noOnDevice):
+    case .canNotTranscribe(.localeNotSupported), .canNotTranscribe(.noOnDevice):
       return true
     default:
       return false
@@ -57,16 +57,7 @@ public struct PodcastRecordingView: View {
       \(error.localizedDescription)
       """
     case .canNotTranscribe(let reason):
-      switch reason {
-      case .localNotSupported:
-        return "Your language is not supported for transcription"
-      case .noOnDevice:
-        return "On device transcription not supported"
-      case .noPermission:
-        return "We don't have permission from you to transcribe"
-      case .temporary:
-        return "Transcription service not available. Try again later."
-      }
+      return reason.localizedDescription
     }
   }
 

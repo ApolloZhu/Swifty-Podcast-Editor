@@ -11,13 +11,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
     case started
     case finished
     case errored(Error)
-    case canNotTranscribe(NoTranscription)
-    public enum NoTranscription {
-      case localNotSupported
-      case noOnDevice
-      case noPermission
-      case temporary
-    }
+    case canNotTranscribe(AudioAnalyzer.NoTranscription)
   }
 
   @Published
@@ -80,7 +74,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
 
   public func start(fileName: String = defaultFileName) {
     if speechRecognizer == nil {
-      setState(.canNotTranscribe(.localNotSupported))
+      setState(.canNotTranscribe(.localeNotSupported))
     }
     if !speechRecognizer.supportsOnDeviceRecognition {
       setState(.canNotTranscribe(.noOnDevice))

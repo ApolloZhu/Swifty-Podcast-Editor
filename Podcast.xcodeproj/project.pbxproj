@@ -17,6 +17,9 @@
 		D2A848CB247055AE00393C2E /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A848CA247055AE00393C2E /* Error.swift */; };
 		D2A848CD24705B7E00393C2E /* PodcastRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A848CC24705B7E00393C2E /* PodcastRecordingView.swift */; };
 		D2A848CF24706C1800393C2E /* PlaygroundHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A848CE24706C1800393C2E /* PlaygroundHelper.swift */; };
+		D2A848D12470813F00393C2E /* AudioAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A848D02470813F00393C2E /* AudioAnalyzer.swift */; };
+		D2A848D32470857E00393C2E /* PodcastTranscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A848D22470857E00393C2E /* PodcastTranscriptionView.swift */; };
+		D2A848D52470877800393C2E /* AudioSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A848D42470877800393C2E /* AudioSegment.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +36,9 @@
 		D2A848CA247055AE00393C2E /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		D2A848CC24705B7E00393C2E /* PodcastRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastRecordingView.swift; sourceTree = "<group>"; };
 		D2A848CE24706C1800393C2E /* PlaygroundHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundHelper.swift; sourceTree = "<group>"; };
+		D2A848D02470813F00393C2E /* AudioAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAnalyzer.swift; sourceTree = "<group>"; };
+		D2A848D22470857E00393C2E /* PodcastTranscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastTranscriptionView.swift; sourceTree = "<group>"; };
+		D2A848D42470877800393C2E /* AudioSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSegment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +75,9 @@
 				D250719024627A400044AF20 /* AppDelegate.swift */,
 				D250719224627A400044AF20 /* SceneDelegate.swift */,
 				D2A848CC24705B7E00393C2E /* PodcastRecordingView.swift */,
+				D2A848D22470857E00393C2E /* PodcastTranscriptionView.swift */,
+				D2A848D42470877800393C2E /* AudioSegment.swift */,
+				D2A848D02470813F00393C2E /* AudioAnalyzer.swift */,
 				D2A848C82470534E00393C2E /* AudioRecorder.swift */,
 				D2A848CA247055AE00393C2E /* Error.swift */,
 				D2A848CE24706C1800393C2E /* PlaygroundHelper.swift */,
@@ -162,8 +171,11 @@
 			files = (
 				D250719124627A400044AF20 /* AppDelegate.swift in Sources */,
 				D250719324627A400044AF20 /* SceneDelegate.swift in Sources */,
+				D2A848D52470877800393C2E /* AudioSegment.swift in Sources */,
 				D2A848CD24705B7E00393C2E /* PodcastRecordingView.swift in Sources */,
 				D29BD288246953D2002F35A6 /* punctuator.mlmodel in Sources */,
+				D2A848D32470857E00393C2E /* PodcastTranscriptionView.swift in Sources */,
+				D2A848D12470813F00393C2E /* AudioAnalyzer.swift in Sources */,
 				D2A848C92470534E00393C2E /* AudioRecorder.swift in Sources */,
 				D2A848CB247055AE00393C2E /* Error.swift in Sources */,
 				D2A848CF24706C1800393C2E /* PlaygroundHelper.swift in Sources */,

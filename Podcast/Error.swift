@@ -11,8 +11,8 @@ import Foundation
 extension String: Error { }
 
 extension Result where Success == Void {
-    public static var success: Self {
-        return .success(())
-    }
+  public static var success: Self {
+    return .success(())
+  }
 }
 

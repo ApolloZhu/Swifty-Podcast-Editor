@@ -15,10 +15,13 @@ public struct PodcastRecordingView: View {
       Spacer()
       Button(buttonText) {
         switch self.recorder.state {
-        case .started: self.recorder.stop()
-        case .errored, .finished: self.recorder.start()
+        case .started:
+          self.recorder.stop()
+        case .errored, .finished, .canNotTranscribe:
+          self.recorder.start()
         }
       }
+      .disabled(buttonDisabled)
       .foregroundColor(.white)
       .padding()
       .background(buttonColor)
@@ -26,7 +29,19 @@ public struct PodcastRecordingView: View {
 
       ScrollView {
         Text(recorder.transcript)
+          .font(.body)
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
       }
+    }
+    .padding()
+  }
+
+  var buttonDisabled: Bool {
+    switch recorder.state {
+    case .canNotTranscribe(.localNotSupported), .canNotTranscribe(.noOnDevice):
+      return true
+    default:
+      return false
     }
   }
 
@@ -38,9 +53,20 @@ public struct PodcastRecordingView: View {
       return "Stop Recording"
     case .errored(let error):
       return """
-      Try Again?
+      Something Went Wrong. Try Again?
       \(error.localizedDescription)
       """
+    case .canNotTranscribe(let reason):
+      switch reason {
+      case .localNotSupported:
+        return "Your language is not supported for transcription"
+      case .noOnDevice:
+        return "On device transcription not supported"
+      case .noPermission:
+        return "We don't have permission from you to transcribe"
+      case .temporary:
+        return "Transcription service not available. Try again later."
+      }
     }
   }
 
@@ -50,7 +76,7 @@ public struct PodcastRecordingView: View {
       return Color.blue
     case .started:
       return Color.green
-    case .errored:
+    case .errored, .canNotTranscribe:
       return Color.red
     }
   }

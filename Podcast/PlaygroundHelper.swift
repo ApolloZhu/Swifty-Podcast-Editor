@@ -12,20 +12,20 @@ import Foundation
 import PlaygroundSupport
 
 func get<T: Codable>(_ key: String, ofType type: T.Type) -> T? {
-    switch PlaygroundKeyValueStore.current[key] {
-        case .data(let data):
-            return try? JSONDecoder().decode(type, from: data)
-        default:
-            return nil
-    }
+  switch PlaygroundKeyValueStore.current[key] {
+  case .data(let data):
+    return try? JSONDecoder().decode(type, from: data)
+  default:
+    return nil
+  }
 }
 
 func set<T: Codable>(_ key: String, _ value: T?) {
-    if let data = try? value.map(JSONEncoder().encode) {
-        PlaygroundKeyValueStore.current[key] = .data(data)
-    } else {
-        PlaygroundKeyValueStore.current[key] = nil
-    }
+  if let data = try? value.map(JSONEncoder().encode) {
+    PlaygroundKeyValueStore.current[key] = .data(data)
+  } else {
+    PlaygroundKeyValueStore.current[key] = nil
+  }
 }
 #else
 let playgroundSharedDataDirectory = FileManager.default

@@ -19,7 +19,7 @@ public struct AutoTranscriptionSegment: Codable, Equatable, Identifiable {
   let alternatives: [String]
   let start: TimeInterval
   let duration: TimeInterval
-
+  
   var end: TimeInterval {
     return start + duration
   }
@@ -33,7 +33,7 @@ public class AudioSegmentPlayer {
     player = try! AVAudioPlayer(contentsOf: url)
     player.prepareToPlay()
   }
-
+  
   func play(start: TimeInterval, end: TimeInterval) {
     #if !os(macOS)
     try? AVAudioSession.sharedInstance()
@@ -41,11 +41,11 @@ public class AudioSegmentPlayer {
     try? AVAudioSession.sharedInstance()
       .setActive(true, options: .notifyOthersOnDeactivation)
     #endif
-
+    
     let interval = min(end, 0.05)
     Timer.scheduledTimer(withTimeInterval: interval, repeats: true) {
       [weak self] timer in
-
+      
       guard let self = self else { return timer.invalidate() }
       if self.player.currentTime > end {
         self.player.pause()

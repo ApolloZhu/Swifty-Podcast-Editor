@@ -26,7 +26,7 @@ public struct PodcastRecordingView: View {
       .padding()
       .background(buttonColor)
       .cornerRadius(10)
-
+      
       ScrollView {
         Text(recorder.transcript)
           .font(.body)
@@ -35,7 +35,7 @@ public struct PodcastRecordingView: View {
     }
     .padding()
   }
-
+  
   var buttonDisabled: Bool {
     switch recorder.state {
     case .canNotTranscribe(.localeNotSupported), .canNotTranscribe(.noOnDevice):
@@ -44,7 +44,7 @@ public struct PodcastRecordingView: View {
       return false
     }
   }
-
+  
   var buttonText: String {
     switch recorder.state {
     case .finished:
@@ -60,7 +60,7 @@ public struct PodcastRecordingView: View {
       return reason.localizedDescription
     }
   }
-
+  
   var buttonColor: Color {
     switch recorder.state {
     case .finished:

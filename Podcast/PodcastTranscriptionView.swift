@@ -10,7 +10,8 @@ import SwiftUI
 
 extension View {
   func styledTextSegment(backgroundColor: Color) -> some View {
-    self.padding(.horizontal)
+    self.padding(.leading, 20)
+      .padding(.trailing)
       .padding(.vertical, 5)
       .background(backgroundColor.opacity(0.3))
       .cornerRadius(5)
@@ -25,12 +26,12 @@ struct SegmentView: View {
   var locator: CollectionViewElementLocator
   var base: CGSize
   var moveTo: (Int) -> Void
-
-  var showNoSuggestions: Bool {
+  
+  private var showNoSuggestions: Bool {
     return segment.alternatives.isEmpty
       || segment.modified
   }
-
+  
   var body: some View {
     HStack {
       Button(action: {
@@ -42,7 +43,7 @@ struct SegmentView: View {
         Image(systemName: "play.circle.fill")
         #endif
       }
-
+      
       if showNoSuggestions {
         TextField("", text: $segment.text)
           .fixedSize()
@@ -68,27 +69,34 @@ struct SegmentView: View {
         }
       }
     }
-    .styledTextSegment(backgroundColor: showNoSuggestions ? .gray : .purple)
-    .zIndex(offset == .zero ? 0 : 999)
-    .offset(offset)
-    .gesture(
-      DragGesture()
-        .onChanged { info in
-          self.offset = info.translation
-      }.onEnded { info in
-        if let index = self.locator(info.translation, self.base) {
-          self.moveTo(index)
+    .styledTextSegment(backgroundColor:
+      offset == .zero ? showNoSuggestions ? .gray : .purple : .green
+    )
+      .zIndex(offset == .zero ? 0 : 999)
+      .offset(offset)
+      .gesture(
+        DragGesture()
+          .onChanged { info in
+            self.offset = info.translation
+        }.onEnded { info in
+          let point = CGPoint(
+            x: self.base.width + info.translation.width + info.startLocation.x,
+            y: self.base.height + info.translation.height + info.startLocation.y
+          )
+          if let index = self.locator(point) {
+            print(index)
+            self.moveTo(index)
+          }
+          self.offset = .zero
         }
-        self.offset = .zero
-      }
     )
   }
 }
 
 struct PodcastTranscriptionView: View {
-  @State var analyzer = AudioAnalyzer()
+  @ObservedObject var analyzer = AudioAnalyzer()
   @State private var editMode = EditMode.active
-
+  
   var body: some View {
     switch analyzer.state {
     case .processing(let text):
@@ -101,8 +109,10 @@ struct PodcastTranscriptionView: View {
             locator: locator,
             base: base,
             moveTo: { newIndex in
-              self.analyzer.segments
-                .move(fromOffsets: IndexSet(integer: i), toOffset: newIndex)
+              self.analyzer.segments.insert(
+                self.analyzer.segments.remove(at: i),
+                at: newIndex
+              )
           })
         }
         .coordinateSpace(name: "CollectionView")

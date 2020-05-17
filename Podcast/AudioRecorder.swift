@@ -13,7 +13,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
     case errored(Error)
     case canNotTranscribe(AudioAnalyzer.NoTranscription)
   }
-
+  
   @Published
   public private(set) var state: State = .finished
   
@@ -34,25 +34,25 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
       self.state = newState
     }
   }
-
+  
   // MARK: - Transcription
-
+  
   @Published
   public private(set) var transcript: String = ""
-
+  
   private let speechRecognizer: SFSpeechRecognizer!
   private let audioEngine = AVAudioEngine()
-
+  
   private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest!
   private var recognitionTask: SFSpeechRecognitionTask?
-
+  
   public override init() {
     speechRecognizer = SFSpeechRecognizer()
       ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     super.init()
     speechRecognizer?.delegate = self
   }
-
+  
   public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer,
                                availabilityDidChange available: Bool) {
     if available {
@@ -63,15 +63,15 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
       stop(.canNotTranscribe(.temporary))
     }
   }
-
+  
   // MARK: - Recording
-
+  
   #if !os(macOS)
   private let session = AVAudioSession.sharedInstance()
   #endif
-
+  
   public static let defaultFileName = "recording"
-
+  
   public func start(fileName: String = defaultFileName) {
     if speechRecognizer == nil {
       setState(.canNotTranscribe(.localeNotSupported))
@@ -104,12 +104,12 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
       }
     }
   }
-
+  
   private func startRecording(to file: String) {
     let file = file.hasSuffix(".caf") ? file : file + ".caf"
     let fileURL = playgroundSharedDataDirectory.appendingPathComponent(file)
     // print(fileURL.absoluteString)
-
+    
     // Create and configure the speech recognition request.
     recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
     recognitionRequest.shouldReportPartialResults = true
@@ -117,7 +117,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
     recognitionTask = speechRecognizer
       .recognitionTask(with: recognitionRequest,
                        resultHandler: handleTranscription)
-
+    
     do {
       let inputNode = audioEngine.inputNode
       let format = inputNode.inputFormat(forBus: 0)
@@ -143,9 +143,9 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
       setState(.errored(error))
     }
   }
-
+  
   private var transcriptions = [AutoTranscriptionSegment]()
-
+  
   func handleTranscription(result: SFSpeechRecognitionResult?, error: Error?) {
     if let result = result {
       let best = result.bestTranscription
@@ -163,7 +163,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
       stop(.errored(error))
     }
   }
-
+  
   public func stop(_ state: State = .finished) {
     guard audioEngine.isRunning else {
       return setState(state)
@@ -172,7 +172,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
     recognitionRequest?.endAudio()
     recognitionRequest = nil
     recognitionTask = nil
-
+    
     #if !os(macOS)
     do {
       try session.setActive(false, options: .notifyOthersOnDeactivation)

@@ -13,7 +13,7 @@ import SwiftUI
  The "easiest" way to do this seems to be using preference keys:
  these are values that a child view can set
  and that get propagated up in the view hierarchy.
-
+ 
  A preference key consists of two parts:
  a type for the data (this needs to be equatable)
  and a type for the key itself.
@@ -26,9 +26,9 @@ struct MyPreferenceKeyData: Equatable {
 
 struct MyPreferenceKey: PreferenceKey {
   typealias Value = [MyPreferenceKeyData]
-
+  
   static var defaultValue: [MyPreferenceKeyData] = []
-
+  
   static func reduce(value: inout [MyPreferenceKeyData],
                      nextValue: () -> [MyPreferenceKeyData]) {
     value.append(contentsOf: nextValue())
@@ -50,7 +50,6 @@ struct PropagatesSize<ID: Hashable, V: View>: View {
         value: [MyPreferenceKeyData(size: proxy.size, id: AnyHashable(self.id))]
       )
     })
-
   }
 }
 
@@ -59,16 +58,17 @@ struct PropagatesSize<ID: Hashable, V: View>: View {
 struct FlowLayout {
   let spacing: UIOffset
   let containerSize: CGSize
-
-  init(containerSize: CGSize, spacing: UIOffset = UIOffset(horizontal: 10, vertical: 10)) {
+  
+  init(containerSize: CGSize,
+       spacing: UIOffset = UIOffset(horizontal: 10, vertical: 10)) {
     self.spacing = spacing
     self.containerSize = containerSize
   }
-
+  
   var currentX = 0 as CGFloat
   var currentY = 0 as CGFloat
   var lineHeight = 0 as CGFloat
-
+  
   mutating func add(element size: CGSize) -> CGRect {
     if currentX + size.width > containerSize.width {
       currentX = 0
@@ -81,7 +81,7 @@ struct FlowLayout {
     }
     return CGRect(origin: CGPoint(x: currentX, y: currentY), size: size)
   }
-
+  
   var size: CGSize {
     return CGSize(width: containerSize.width, height: currentY + lineHeight)
   }
@@ -89,35 +89,34 @@ struct FlowLayout {
 
 /*
  Finally, here's the collection view. It works as following:
-
+ 
  It contains a collection of `Data`
  and a way to construct `Content` from an element of `Data`.
-
+ 
  For each value of `Data`,
  it wraps the element in a `PropagatesSize` container,
  and then collects all those sizes to construct the layout.
  */
 
-typealias CollectionViewElementLocator = (CGSize, CGSize) -> Data.Index?
+typealias CollectionViewElementLocator = (CGPoint) -> Data.Index?
 
 
 struct CollectionView<Data: RandomAccessCollection, Content: View>: View
 where Data.Element: Identifiable, Data.Index == Int {
-
+  
   var data: Data
   @State private var sizes: [MyPreferenceKeyData] = []
   var content: (Data.Element, CGSize, @escaping CollectionViewElementLocator) -> Content
-
+  
   private class ItemFrames {
     fileprivate var data: [CGRect] = []
   }
   private let frames = ItemFrames()
-
-  func insertionIndex(for translation: CGSize, base: CGSize) -> Data.Index? {
-    print(translation, frames.data)
+  
+  func insertionIndex(for point: CGPoint) -> Data.Index? {
+    print(frames.data)
     if frames.data.isEmpty { return nil }
-    let (x, y) = (base.width + translation.width,
-                  base.height + translation.height)
+    let (x, y) = (point.x, point.y)
     print(x, y)
     if y < frames.data.first!.minY {
       return nil
@@ -126,7 +125,7 @@ where Data.Element: Identifiable, Data.Index == Int {
       return nil
     }
     var i = 0, j = frames.data.count
-
+    
     while i < j {
       print(i, j)
       let mid = (i + j - 1) / 2
@@ -143,7 +142,7 @@ where Data.Element: Identifiable, Data.Index == Int {
       } else if x >= frames.data[mid].maxX {
         if mid + 1 == frames.data.count
           || x <= frames.data[mid + 1].minX {
-          return mid
+          return mid + 1
         } else {
           i = mid + 1
         }
@@ -153,9 +152,9 @@ where Data.Element: Identifiable, Data.Index == Int {
     }
     return j
   }
-
+  
   typealias Layout = (items: [AnyHashable: CGSize], size: CGSize)
-
+  
   func layout(size: CGSize) -> Layout {
     var f = FlowLayout(containerSize: size)
     var result: [AnyHashable: CGSize] = [:]
@@ -168,7 +167,7 @@ where Data.Element: Identifiable, Data.Index == Int {
     frames.data = itemFrames
     return (result, f.size)
   }
-
+  
   func withLayout(_ laidout: Layout) -> some View {
     return ZStack(alignment: .topLeading) {
       ForEach(self.data) { el in
@@ -185,7 +184,7 @@ where Data.Element: Identifiable, Data.Index == Int {
         self.sizes = $0
       })
   }
-
+  
   var body: some View {
     return GeometryReader { proxy in
       self.withLayout(self.layout(size: proxy.size))

@@ -11,12 +11,6 @@ import SwiftUI
 public struct PodcastRecordingView: View {
   public init() { }
 
-  #if os(macOS)
-  let foregroundColor: Color = .primary
-  #else
-  let foregroundColor: Color = .white
-  #endif
-
   @ObservedObject public var recorder = AudioRecorder()
   public var body: some View {
     VStack {
@@ -29,8 +23,9 @@ public struct PodcastRecordingView: View {
           self.recorder.start()
         }
       }
+      .buttonStyle(PlainButtonStyle())
       .disabled(buttonDisabled)
-      .foregroundColor(foregroundColor)
+      .foregroundColor(.white)
       .padding()
       .background(buttonColor)
       .cornerRadius(10)

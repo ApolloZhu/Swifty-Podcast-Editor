@@ -53,7 +53,7 @@ public struct PodcastTranscriptionView: View {
 
   var inputNew: some View {
     #if os(macOS)
-    VStack {
+    return VStack {
       Spacer()
       if showVoiceChooser {
         Group {

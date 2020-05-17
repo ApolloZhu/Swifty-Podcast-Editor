@@ -111,7 +111,7 @@ struct PodcastTranscriptionView: View {
             moveTo: { newIndex in
               self.analyzer.segments.insert(
                 self.analyzer.segments.remove(at: i),
-                at: newIndex
+                at: max(min(newIndex, self.analyzer.segments.count), 0)
               )
           })
         }

@@ -65,14 +65,17 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
   private let fileURL: URL
   private let speechRecognizer: SFSpeechRecognizer!
   
-  public init(analyzing file: URL = defaultURL) {
+  public init(analyzing file: URL = defaultURL, loadIfAvailable: Bool = true) {
     fileURL = file
     speechRecognizer = SFSpeechRecognizer()
       ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     super.init()
-    segments = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self)!
-    state = .finished
-    return
+    if loadIfAvailable,
+      let previous = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self) {
+      segments = previous
+      state = .finished
+      return
+    }
     guard let speechRecognizer = speechRecognizer else {
       setState(.canNotTranscribe(.localeNotSupported))
       return

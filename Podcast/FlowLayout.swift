@@ -122,7 +122,7 @@ where Data.Element: Identifiable, Data.Index == Int {
       return nil
     }
     if y > frames.data.last!.maxY {
-      return nil
+      return frames.data.count
     }
     var i = 0, j = frames.data.count
     
@@ -134,14 +134,17 @@ where Data.Element: Identifiable, Data.Index == Int {
       } else if y > frames.data[mid].maxY {
         i = mid + 1
       } else if x <= frames.data[mid].minX {
-        if mid == 0 || x >= frames.data[mid - 1].maxX {
+        if mid == 0
+          || x >= frames.data[mid - 1].maxX
+          || 0 == frames.data[mid].minX {
           return mid
         } else {
           j = mid - 1
         }
       } else if x >= frames.data[mid].maxX {
         if mid + 1 == frames.data.count
-          || x <= frames.data[mid + 1].minX {
+          || x <= frames.data[mid + 1].minX
+          || 0 == frames.data[mid + 1].minX {
           return mid + 1
         } else {
           i = mid + 1

@@ -27,30 +27,72 @@ public struct PodcastTranscriptionView: View {
   @State private var showVoiceChooser: Bool = false
   @State private var voices = AVSpeechSynthesisVoice.speechVoices()
 
+
+  var inputTextField: some View {
+    TextField(
+      "Enter new text to be spoken", text: self.$newText,
+      onCommit: {
+        if let language = self.newText.dominantLanguage {
+          self.voices = AVSpeechSynthesisVoice.speechVoices()
+            .filter { $0.language.hasPrefix(language)
+              || $0.language.hasPrefix(language.split(separator: "-")[0]) }
+            .sorted { $0.quality.rawValue >= $1.quality.rawValue
+              || $0.name < $1.name }
+          if self.voices.count < 2 {
+            self.appendAudioSegment()
+          } else {
+            self.showVoiceChooser = true
+          }
+        } else {
+          self.appendAudioSegment()
+        }
+    })
+      .padding()
+      .background(Color.purple.opacity(0.5))
+  }
+
   var inputNew: some View {
+    #if os(macOS)
     VStack {
       Spacer()
-      TextField(
-        "Enter new text to be spoken", text: self.$newText,
-        onCommit: {
-          if let language = self.newText.dominantLanguage {
-            self.voices = AVSpeechSynthesisVoice.speechVoices()
-              .filter { $0.language.hasPrefix(language)
-                || $0.language.hasPrefix(language.split(separator: "-")[0]) }
-              .sorted { $0.quality.rawValue >= $1.quality.rawValue
-                || $0.name < $1.name }
-            if self.voices.count < 2 {
-              self.appendAudioSegment()
-            } else {
-              self.showVoiceChooser = true
+      if showVoiceChooser {
+        Group {
+          Text("Select a \(Locale.displayName(for: self.newText.dominantLanguage ?? "")) Voice")
+            .font(.title)
+          Text("Choose a voice to speak this text")
+          ScrollView(.horizontal, showsIndicators: false) {
+            HStack {
+              Button("Use Default") {
+                self.showVoiceChooser = false
+                self.appendAudioSegment()
+              }
+              .foregroundColor(.primary)
+              .padding()
+              .background(Color.accentColor.opacity(0.5))
+              .cornerRadius(5)
+              .fixedSize()
+              ForEach(voices, id: \.identifier) { voice in
+                Button(voice.name) {
+                  self.showVoiceChooser = false
+                  self.appendAudioSegment(voice: voice)
+                }
+                .padding()
+                .background(Color.gray.opacity(0.5))
+                .cornerRadius(5)
+                .fixedSize()
+              }
             }
-          } else {
-            self.appendAudioSegment()
           }
-      })
+        }
         .padding()
-        .background(Color.purple.opacity(0.5))
-        /*
+      } else {
+        inputTextField
+      }
+    }
+    #else
+    return VStack {
+      Spacer()
+      inputTextField
         .actionSheet(isPresented: self.$showVoiceChooser) {
           return ActionSheet(
             title: Text("Select a \(Locale.displayName(for: self.newText.dominantLanguage ?? "")) Voice"),
@@ -65,8 +107,9 @@ public struct PodcastTranscriptionView: View {
                 }
             ]
           )
-      }*/
+      }
     }
+    #endif
   }
 
   public var body: some View {

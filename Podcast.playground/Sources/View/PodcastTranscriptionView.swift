@@ -83,7 +83,7 @@ public struct PodcastTranscriptionView: View {
           }
         }
         .padding()
-        .background(Color.white)
+        .background(Color.purple.opacity(0.5))
       } else {
         playAll
         inputTextField

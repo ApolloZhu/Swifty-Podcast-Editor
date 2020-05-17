@@ -115,7 +115,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
   private func startRecording(to file: String) {
     let file = file.hasSuffix(".caf") ? file : file + ".caf"
     let fileURL = playgroundSharedDataDirectory.appendingPathComponent(file)
-    dump(fileURL)
+    set(fileURL.absoluteString, [AudioSegment]())
 
     // Create and configure the speech recognition request.
     recognitionRequest = SFSpeechAudioBufferRecognitionRequest()

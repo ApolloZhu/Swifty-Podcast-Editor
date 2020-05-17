@@ -77,7 +77,8 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
       ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     super.init()
     if loadIfAvailable,
-      let previous = get(file.absoluteString, ofType: [AudioSegment].self) {
+      let previous = get(file.absoluteString, ofType: [AudioSegment].self),
+      !previous.isEmpty {
       segments = previous
       state = .finished
       return

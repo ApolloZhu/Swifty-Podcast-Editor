@@ -22,6 +22,9 @@ let player = AudioSegmentPlayer()
 struct SegmentView: View {
   @Binding var segment: AutoTranscriptionSegment
   @State private var offset: CGSize = .zero
+  var locator: CollectionViewElementLocator
+  var base: CGSize
+  var moveTo: (Int) -> Void
 
   var showNoSuggestions: Bool {
     return segment.alternatives.isEmpty
@@ -66,20 +69,24 @@ struct SegmentView: View {
       }
     }
     .styledTextSegment(backgroundColor: showNoSuggestions ? .gray : .purple)
+    .zIndex(offset == .zero ? 0 : 999)
     .offset(offset)
     .gesture(
       DragGesture()
         .onChanged { info in
           self.offset = info.translation
       }.onEnded { info in
-        self.offset = info.translation
+        if let index = self.locator(info.translation, self.base) {
+          self.moveTo(index)
+        }
+        self.offset = .zero
       }
     )
   }
 }
 
 struct PodcastTranscriptionView: View {
-  @ObservedObject var analyzer = AudioAnalyzer()
+  @State var analyzer = AudioAnalyzer()
   @State private var editMode = EditMode.active
 
   var body: some View {
@@ -88,9 +95,17 @@ struct PodcastTranscriptionView: View {
       return AnyView(Text(text + " ... (still processing)").padding())
     case .finished:
       return AnyView(
-        CollectionView(data: self.analyzer.segments.indices) { i in
-          SegmentView(segment: self.$analyzer.segments[i])
+        CollectionView(data: self.analyzer.segments.indices) { i, base, locator in
+          SegmentView(
+            segment: self.$analyzer.segments[i],
+            locator: locator,
+            base: base,
+            moveTo: { newIndex in
+              self.analyzer.segments
+                .move(fromOffsets: IndexSet(integer: i), toOffset: newIndex)
+          })
         }
+        .coordinateSpace(name: "CollectionView")
         .padding()
       )
     case .errored(let error):

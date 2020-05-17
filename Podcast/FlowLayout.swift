@@ -1,7 +1,7 @@
 //
 //  FlowLayout.swift
 //
-//  Modified by Apollo Zhu to handle rearrangement.
+//  Modified by Apollo Zhu to allow drag & drop reordering.
 //  Originally created by Chris Eidhof on 20.08.19.
 //  https://gist.github.com/chriseidhof/3c6ea3fb2102052d1898d8ea27fbee07
 //
@@ -29,7 +29,8 @@ struct MyPreferenceKey: PreferenceKey {
 
   static var defaultValue: [MyPreferenceKeyData] = []
 
-  static func reduce(value: inout [MyPreferenceKeyData], nextValue: () -> [MyPreferenceKeyData]) {
+  static func reduce(value: inout [MyPreferenceKeyData],
+                     nextValue: () -> [MyPreferenceKeyData]) {
     value.append(contentsOf: nextValue())
   }
 }
@@ -44,7 +45,10 @@ struct PropagatesSize<ID: Hashable, V: View>: View {
   var content: V
   var body: some View {
     content.background(GeometryReader { proxy in
-      empty.preference(key: MyPreferenceKey.self, value: [MyPreferenceKeyData(size: proxy.size, id: AnyHashable(self.id))])
+      empty.preference(
+        key: MyPreferenceKey.self,
+        value: [MyPreferenceKeyData(size: proxy.size, id: AnyHashable(self.id))]
+      )
     })
 
   }
@@ -94,30 +98,88 @@ struct FlowLayout {
  and then collects all those sizes to construct the layout.
  */
 
-struct CollectionView<Data, Content>: View
-where Data: RandomAccessCollection, Data.Element: Identifiable, Content: View {
+typealias CollectionViewElementLocator = (CGSize, CGSize) -> Data.Index?
+
+
+struct CollectionView<Data: RandomAccessCollection, Content: View>: View
+where Data.Element: Identifiable, Data.Index == Int {
+
   var data: Data
   @State private var sizes: [MyPreferenceKeyData] = []
-  var content: (Data.Element) -> Content
+  var content: (Data.Element, CGSize, @escaping CollectionViewElementLocator) -> Content
 
-  func layout(size: CGSize) -> (items: [AnyHashable:CGSize], size: CGSize) {
+  private class ItemFrames {
+    fileprivate var data: [CGRect] = []
+  }
+  private let frames = ItemFrames()
+
+  func insertionIndex(for translation: CGSize, base: CGSize) -> Data.Index? {
+    print(translation, frames.data)
+    if frames.data.isEmpty { return nil }
+    let (x, y) = (base.width + translation.width,
+                  base.height + translation.height)
+    print(x, y)
+    if y < frames.data.first!.minY {
+      return nil
+    }
+    if y > frames.data.last!.maxY {
+      return nil
+    }
+    var i = 0, j = frames.data.count
+
+    while i < j {
+      print(i, j)
+      let mid = (i + j - 1) / 2
+      if y < frames.data[mid].minY {
+        j = mid - 1
+      } else if y > frames.data[mid].maxY {
+        i = mid + 1
+      } else if x <= frames.data[mid].minX {
+        if mid == 0 || x >= frames.data[mid - 1].maxX {
+          return mid
+        } else {
+          j = mid - 1
+        }
+      } else if x >= frames.data[mid].maxX {
+        if mid + 1 == frames.data.count
+          || x <= frames.data[mid + 1].minX {
+          return mid
+        } else {
+          i = mid + 1
+        }
+      } else {
+        return mid
+      }
+    }
+    return j
+  }
+
+  typealias Layout = (items: [AnyHashable: CGSize], size: CGSize)
+
+  func layout(size: CGSize) -> Layout {
     var f = FlowLayout(containerSize: size)
-    var result: [AnyHashable:CGSize] = [:]
+    var result: [AnyHashable: CGSize] = [:]
+    var itemFrames = [CGRect]()
     for s in sizes {
       let rect = f.add(element: s.size)
+      itemFrames.append(rect)
       result[s.id] = CGSize(width: rect.origin.x, height: rect.origin.y)
     }
+    frames.data = itemFrames
     return (result, f.size)
   }
 
-  func withLayout(_ laidout: (items: [AnyHashable:CGSize], size: CGSize)) -> some View {
+  func withLayout(_ laidout: Layout) -> some View {
     return ZStack(alignment: .topLeading) {
       ForEach(self.data) { el in
-        PropagatesSize(id: el.id, content: self.content(el))
-          .offset(laidout.items[AnyHashable(el.id)] ?? .zero)
+        PropagatesSize(id: el.id, content: self.content(
+          el, laidout.items[AnyHashable(el.id)] ?? .zero, self.insertionIndex
+        )).offset(laidout.items[AnyHashable(el.id)] ?? .zero)
           .animation(Animation.default)
       }
-      Color.clear.frame(width: laidout.size.width, height: laidout.size.height).fixedSize()
+      Color.clear
+        .frame(width: laidout.size.width, height: laidout.size.height)
+        .fixedSize()
     }.background(Color.clear)
       .onPreferenceChange(MyPreferenceKey.self, perform: {
         self.sizes = $0

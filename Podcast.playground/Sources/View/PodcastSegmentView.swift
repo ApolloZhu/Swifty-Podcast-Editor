@@ -50,15 +50,28 @@ struct SegmentView: View {
           .textFieldStyle(PlainTextFieldStyle())
           .fixedSize()
       } else {
+        #if os(macOS)
         HStack {
           TextField("", text: $segment.text)
             .textFieldStyle(PlainTextFieldStyle())
             .fixedSize()
-          #if os(macOS)
-          Text("📝")
-          #else
+          MenuButton("📝") {
+            Button(segment.text) {
+              self.segment.modified = true
+            }
+            ForEach(segment.alternatives, id: \.self) { alternative in
+              Button(alternative) {
+                self.segment.text = alternative
+              }
+            }
+          }.menuButtonStyle(BorderlessButtonMenuButtonStyle())
+        }
+        #else
+        HStack {
+          TextField("", text: $segment.text)
+            .textFieldStyle(PlainTextFieldStyle())
+            .fixedSize()
           Image(systemName: "doc.plaintext")
-          #endif
         }
         .contextMenu {
           Button(segment.text) {
@@ -70,6 +83,7 @@ struct SegmentView: View {
             }
           }
         }
+        #endif
       }
     }
     .styledTextSegment(backgroundColor:

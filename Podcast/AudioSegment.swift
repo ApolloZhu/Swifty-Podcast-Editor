@@ -8,12 +8,6 @@
 
 import Foundation
 
-public struct AudioSegment: Codable {
-  var text: String
-  var start: TimeInterval
-  var duration: TimeInterval
-}
-
 public struct AutoTranscriptionSegment: Codable, Equatable, Identifiable {
   public let id = UUID()
   var text: String {
@@ -25,4 +19,32 @@ public struct AutoTranscriptionSegment: Codable, Equatable, Identifiable {
   let alternatives: [String]
   let start: TimeInterval
   let duration: TimeInterval
+
+  var end: TimeInterval {
+    return start + duration
+  }
+}
+
+import AVFoundation
+
+public class AudioSegmentPlayer {
+  private let player: AVAudioPlayer
+  public init(url: URL = defaultURL) {
+    player = try! AVAudioPlayer(contentsOf: url)
+    player.prepareToPlay()
+  }
+
+  func play(start: TimeInterval, end: TimeInterval) {
+    let interval = min(end, 0.05)
+    Timer.scheduledTimer(withTimeInterval: interval, repeats: true) {
+      [weak self] timer in
+      guard let self = self else { return timer.invalidate() }
+      if self.player.currentTime > end {
+        self.player.pause()
+        timer.invalidate()
+      }
+    }
+    player.currentTime = start
+    player.play()
+  }
 }

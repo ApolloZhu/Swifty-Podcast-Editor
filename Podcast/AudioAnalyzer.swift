@@ -9,6 +9,10 @@
 import Foundation
 import AVFoundation
 import Speech
+import NaturalLanguage
+
+public let defaultURL = playgroundSharedDataDirectory
+.appendingPathComponent(AudioRecorder.defaultFileName + ".caf")
 
 public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelegate {
   public enum NoTranscription {
@@ -61,16 +65,14 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
   private let fileURL: URL
   private let speechRecognizer: SFSpeechRecognizer!
 
-  public init(analyzing file: URL? = nil) {
+  public init(analyzing file: URL = defaultURL) {
     fileURL = file
-      ?? playgroundSharedDataDirectory
-        .appendingPathComponent(AudioRecorder.defaultFileName + ".caf")
     speechRecognizer = SFSpeechRecognizer()
       ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     super.init()
-    segments = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self)!
-    state = .finished
-    return
+ segments = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self)!
+ state = .finished
+ return
     guard let speechRecognizer = speechRecognizer else {
       setState(.canNotTranscribe(.localeNotSupported))
       return
@@ -99,7 +101,8 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
                                    error: Error?) {
     if let result = result {
       if result.isFinal {
-        segments = result.bestTranscription.segments.map {
+        print(result.bestTranscription.formattedString)
+        var transcriptions = result.bestTranscription.segments.map {
           AutoTranscriptionSegment(
             text: $0.substring,
             alternatives: $0.alternativeSubstrings
@@ -109,8 +112,31 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
             duration: $0.duration
           )
         }
+        if !transcriptions.isEmpty {
+          let average = max(result.bestTranscription.averagePauseDuration, 0.1)
+          let threshold = average / 3
+          print(threshold)
+
+          // Add punctuations, not the smartest way though.
+          for i in transcriptions.indices.dropLast() {
+            let difference = transcriptions[i + 1].start - transcriptions[i].end
+            if difference >= average {
+              transcriptions[i].text += "."
+              transcriptions[i + 1].text = transcriptions[i + 1].text.localizedCapitalized
+            } else if difference >= threshold {
+              transcriptions[i].text += ","
+            }
+          }
+
+          if transcriptions.last!.text.hasSuffix(".") != true {
+            transcriptions[transcriptions.indices.last!].text += "."
+          }
+
+        }
+        segments = transcriptions
         setState(.finished)
       } else {
+        dump(result.bestTranscription.segments)
         setState(.processing(result.bestTranscription.formattedString))
       }
     }

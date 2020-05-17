@@ -144,13 +144,36 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
     }
   }
 
+  private var transcriptions = [AutoTranscriptionSegment]()
+
   func handleTranscription(result: SFSpeechRecognitionResult?, error: Error?) {
     if let result = result {
       let best = result.bestTranscription
       var transcription = best.formattedString
-      if (result.isFinal || best.segments.first?.timestamp != 0)
-        && !transcript.hasSuffix(".") {
-        transcription += "."
+      if (result.isFinal || best.segments.first?.timestamp != 0) {
+        if !transcript.hasSuffix(".") {
+          transcription += "."
+        }
+
+        var newSegments = result.bestTranscription.segments.map {
+          AutoTranscriptionSegment(
+            text: $0.substring,
+            alternatives: $0.alternativeSubstrings
+              .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+              .filter { !$0.isEmpty },
+            start: $0.timestamp,
+            duration: $0.duration
+          )
+        }
+        if !newSegments.isEmpty {
+          newSegments[newSegments.indices.last!].text += "."
+        }
+
+        transcriptions += newSegments
+
+        if result.isFinal {
+          set("SEGMENTS", transcriptions)
+        }
       }
       DispatchQueue.main.async {
         self.transcript = transcription

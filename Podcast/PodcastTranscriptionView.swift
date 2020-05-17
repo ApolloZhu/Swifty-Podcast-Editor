@@ -21,7 +21,7 @@ extension View {
 let player = AudioSegmentPlayer()
 
 struct SegmentView: View {
-  @Binding var segment: AutoTranscriptionSegment
+  @Binding var segment: TranscribedSegment
   @State private var offset: CGSize = .zero
   var locator: CollectionViewElementLocator
   var base: CGSize
@@ -84,7 +84,6 @@ struct SegmentView: View {
             y: self.base.height + info.translation.height + info.startLocation.y
           )
           if let index = self.locator(point) {
-            print(index)
             self.moveTo(index)
           }
           self.offset = .zero

@@ -11,7 +11,7 @@ import AVFoundation
 import Speech
 import NaturalLanguage
 
-public let defaultURL = playgroundSharedDataDirectory
+public let defaultAudioURL = playgroundSharedDataDirectory
   .appendingPathComponent(AudioRecorder.defaultFileName + ".caf")
 
 public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelegate {
@@ -51,9 +51,9 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     }
   }
   @Published
-  var segments: [AutoTranscriptionSegment] = [] {
+  var segments: [TranscribedSegment] = [] {
     willSet {
-      set("SEGMENTS", newValue)
+      set(fileURL.absoluteString, newValue)
     }
     didSet {
       if oldValue != segments {
@@ -62,16 +62,16 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     }
   }
   
-  private let fileURL: URL
+  public let fileURL: URL
   private let speechRecognizer: SFSpeechRecognizer!
   
-  public init(analyzing file: URL = defaultURL, loadIfAvailable: Bool = true) {
+  public init(analyzing file: URL = defaultAudioURL, loadIfAvailable: Bool = true) {
     fileURL = file
     speechRecognizer = SFSpeechRecognizer()
       ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     super.init()
     if loadIfAvailable,
-      let previous = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self) {
+      let previous = get(file.absoluteString, ofType: [TranscribedSegment].self) {
       segments = previous
       state = .finished
       return
@@ -104,9 +104,8 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
                                    error: Error?) {
     if let result = result {
       if result.isFinal {
-        // print(result.bestTranscription.formattedString)
         var transcriptions = result.bestTranscription.segments.map {
-          AutoTranscriptionSegment(
+          TranscribedSegment(
             text: $0.substring,
             alternatives: $0.alternativeSubstrings
               .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
@@ -118,8 +117,7 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
         if !transcriptions.isEmpty {
           let average = max(result.bestTranscription.averagePauseDuration, 0.1)
           let threshold = average / 3
-          // print(threshold)
-          
+
           // Add punctuations, not the smartest way though.
           for i in transcriptions.indices.dropLast() {
             let difference = transcriptions[i + 1].start - transcriptions[i].end
@@ -146,8 +144,6 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     if let error = error {
       setState(.errored(error))
     }
-    // print(result?.bestTranscription.formattedString)
-    // print(error)
   }
   
   public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer,

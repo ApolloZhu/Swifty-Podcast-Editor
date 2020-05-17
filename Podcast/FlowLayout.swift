@@ -114,10 +114,8 @@ where Data.Element: Identifiable, Data.Index == Int {
   private let frames = ItemFrames()
   
   func insertionIndex(for point: CGPoint) -> Data.Index? {
-    print(frames.data)
     if frames.data.isEmpty { return nil }
     let (x, y) = (point.x, point.y)
-    print(x, y)
     if y < frames.data.first!.minY {
       return nil
     }
@@ -127,7 +125,6 @@ where Data.Element: Identifiable, Data.Index == Int {
     var i = 0, j = frames.data.count
     
     while i < j {
-      print(i, j)
       let mid = (i + j - 1) / 2
       if y < frames.data[mid].minY {
         j = mid - 1

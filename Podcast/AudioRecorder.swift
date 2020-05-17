@@ -108,8 +108,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
   private func startRecording(to file: String) {
     let file = file.hasSuffix(".caf") ? file : file + ".caf"
     let fileURL = playgroundSharedDataDirectory.appendingPathComponent(file)
-    // print(fileURL.absoluteString)
-    
+
     // Create and configure the speech recognition request.
     recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
     recognitionRequest.shouldReportPartialResults = true
@@ -144,7 +143,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
     }
   }
   
-  private var transcriptions = [AutoTranscriptionSegment]()
+  private var transcriptions = [TranscribedSegment]()
   
   func handleTranscription(result: SFSpeechRecognitionResult?, error: Error?) {
     if let result = result {

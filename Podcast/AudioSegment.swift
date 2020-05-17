@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct AutoTranscriptionSegment: Codable, Equatable, Identifiable {
+public struct TranscribedSegment: Codable, Equatable, Identifiable {
   public let id = UUID()
   var text: String {
     didSet {
@@ -29,7 +29,7 @@ import AVFoundation
 
 public class AudioSegmentPlayer {
   private let player: AVAudioPlayer
-  public init(url: URL = defaultURL) {
+  public init(url: URL = defaultAudioURL) {
     player = try! AVAudioPlayer(contentsOf: url)
     player.prepareToPlay()
   }

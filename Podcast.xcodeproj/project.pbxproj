@@ -60,6 +60,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D23F386A24716B2900D58D79 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D2629B0324709A3B0022599B /* FlowLayout.swift */,
+				D2A848CC24705B7E00393C2E /* PodcastRecordingView.swift */,
+				D2A848D22470857E00393C2E /* PodcastTranscriptionView.swift */,
+				D2629B0C24713CB00022599B /* PodcastSegmentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D23F386B24716B3400D58D79 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				D2A848CA247055AE00393C2E /* Error.swift */,
+				D2A848CE24706C1800393C2E /* PlaygroundHelper.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		D23F386C24716B4500D58D79 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				D2629B06247127D40022599B /* AudioComposer.swift */,
+				D2A848D42470877800393C2E /* AudioSegment.swift */,
+				D2629B0E24713D4C0022599B /* AudioSegmentPlayer.swift */,
+				D2A848D02470813F00393C2E /* AudioAnalyzer.swift */,
+				D2A848C82470534E00393C2E /* AudioRecorder.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
 		D250718424627A400044AF20 = {
 			isa = PBXGroup;
 			children = (
@@ -103,17 +135,9 @@
 		D2629B10247163B90022599B /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				D2A848CC24705B7E00393C2E /* PodcastRecordingView.swift */,
-				D2A848D22470857E00393C2E /* PodcastTranscriptionView.swift */,
-				D2629B0C24713CB00022599B /* PodcastSegmentView.swift */,
-				D2629B06247127D40022599B /* AudioComposer.swift */,
-				D2A848D42470877800393C2E /* AudioSegment.swift */,
-				D2629B0E24713D4C0022599B /* AudioSegmentPlayer.swift */,
-				D2A848D02470813F00393C2E /* AudioAnalyzer.swift */,
-				D2A848C82470534E00393C2E /* AudioRecorder.swift */,
-				D2A848CA247055AE00393C2E /* Error.swift */,
-				D2A848CE24706C1800393C2E /* PlaygroundHelper.swift */,
-				D2629B0324709A3B0022599B /* FlowLayout.swift */,
+				D23F386C24716B4500D58D79 /* Audio */,
+				D23F386B24716B3400D58D79 /* Utils */,
+				D23F386A24716B2900D58D79 /* View */,
 			);
 			path = Sources;
 			sourceTree = "<group>";

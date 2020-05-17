@@ -79,8 +79,11 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     if loadIfAvailable,
       let previous = get(file.absoluteString, ofType: [AudioSegment].self),
       !previous.isEmpty {
-      segments = previous
-      state = .finished
+      DispatchQueue.main.async { [weak self] in
+        guard let self = self else { return }
+        self.segments = previous
+        self.setState(.finished)
+      }
       return
     }
     guard let speechRecognizer = speechRecognizer else {

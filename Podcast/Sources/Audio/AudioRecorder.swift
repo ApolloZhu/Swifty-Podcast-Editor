@@ -18,7 +18,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
   public private(set) var state: State = .finished
   
   private func setState(_ newState: State) {
-    dump(newState)
+    // dump(newState)
     switch state {
     case .canNotTranscribe(let reason):
       switch reason {

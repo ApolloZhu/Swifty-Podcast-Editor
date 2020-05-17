@@ -45,13 +45,13 @@ public struct PodcastTranscriptionView: View {
         } else {
           self.appendAudioSegment()
         }
-    })
+    }).textFieldStyle(PlainTextFieldStyle())
       .padding()
       .background(Color.purple.opacity(0.5))
   }
 
   var playAll: some View {
-    Button("Listen") {
+    Button("Listen to My Podcast 🎉") {
       self.player.play(segments: self.analyzer.segments)
     }
   }
@@ -64,7 +64,7 @@ public struct PodcastTranscriptionView: View {
         Group {
           Text("Select a \(Locale.displayName(for: self.newText.dominantLanguage ?? "")) Voice")
             .font(.title)
-          .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity)
           Text("Choose a voice to speak this text")
             .frame(maxWidth: .infinity)
           ScrollView(.horizontal, showsIndicators: false) {

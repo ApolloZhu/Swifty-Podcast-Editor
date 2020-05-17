@@ -80,7 +80,6 @@ public class AudioSegmentPlayer: NSObject, ObservableObject {
     #endif
 
     let (start, end) = (segment.start, segment.end)
-    print(start, end)
     let interval = min(end, 0.05)
     Timer.scheduledTimer(withTimeInterval: interval, repeats: true) {
       [weak self] timer in

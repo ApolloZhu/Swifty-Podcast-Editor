@@ -43,13 +43,16 @@ struct SegmentView: View {
           .foregroundColor(segment.isTranscribed ? .accentColor : .green)
         #endif
       }
+      .buttonStyle(PlainButtonStyle())
 
       if showNoSuggestions {
         TextField("", text: $segment.text)
+          .textFieldStyle(PlainTextFieldStyle())
           .fixedSize()
       } else {
         HStack {
           TextField("", text: $segment.text)
+            .textFieldStyle(PlainTextFieldStyle())
             .fixedSize()
           #if os(macOS)
           Text("📝")

@@ -33,7 +33,11 @@ struct SegmentView: View {
       Button(action: {
         player.play(start: self.segment.start, end: self.segment.end)
       }) {
+        #if os(macOS)
+        Text("▶️")
+        #else
         Image(systemName: "play.circle.fill")
+        #endif
       }
 
       if showNoSuggestions {
@@ -43,7 +47,11 @@ struct SegmentView: View {
         HStack {
           TextField("", text: $segment.text)
             .fixedSize()
+          #if os(macOS)
+          Text("📝")
+          #else
           Image(systemName: "doc.plaintext")
+          #endif
         }
         .contextMenu {
           Button(segment.text) {

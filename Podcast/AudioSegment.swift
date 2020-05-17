@@ -35,13 +35,25 @@ public class AudioSegmentPlayer {
   }
 
   func play(start: TimeInterval, end: TimeInterval) {
+    #if !os(macOS)
+    try? AVAudioSession.sharedInstance()
+      .setCategory(.playback, mode: .default)
+    try? AVAudioSession.sharedInstance()
+      .setActive(true, options: .notifyOthersOnDeactivation)
+    #endif
+
     let interval = min(end, 0.05)
     Timer.scheduledTimer(withTimeInterval: interval, repeats: true) {
       [weak self] timer in
+
       guard let self = self else { return timer.invalidate() }
       if self.player.currentTime > end {
         self.player.pause()
         timer.invalidate()
+        #if !os(macOS)
+        try? AVAudioSession.sharedInstance()
+          .setActive(false, options: .notifyOthersOnDeactivation)
+        #endif
       }
     }
     player.currentTime = start

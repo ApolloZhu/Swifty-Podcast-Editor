@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <playground version='6.0' target-platform='macos'>
     <pages>
-        <page name='1. Record a Podcast'/>
-        <page name='2. Adding Punctuations'/>
+        <page name='Podcast Recording, Live Transcript'/>
+        <page name='Podcast Editing, Reimagined'/>
     </pages>
 </playground>

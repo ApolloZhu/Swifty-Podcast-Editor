@@ -82,17 +82,7 @@
 				D29BD28624693A7E002F35A6 /* Podcast.entitlements */,
 				D250719024627A400044AF20 /* AppDelegate.swift */,
 				D250719224627A400044AF20 /* SceneDelegate.swift */,
-				D2A848CC24705B7E00393C2E /* PodcastRecordingView.swift */,
-				D2A848D22470857E00393C2E /* PodcastTranscriptionView.swift */,
-				D2629B0C24713CB00022599B /* PodcastSegmentView.swift */,
-				D2629B06247127D40022599B /* AudioComposer.swift */,
-				D2A848D42470877800393C2E /* AudioSegment.swift */,
-				D2629B0E24713D4C0022599B /* AudioSegmentPlayer.swift */,
-				D2A848D02470813F00393C2E /* AudioAnalyzer.swift */,
-				D2A848C82470534E00393C2E /* AudioRecorder.swift */,
-				D2A848CA247055AE00393C2E /* Error.swift */,
-				D2A848CE24706C1800393C2E /* PlaygroundHelper.swift */,
-				D2629B0324709A3B0022599B /* FlowLayout.swift */,
+				D2629B10247163B90022599B /* Sources */,
 				D250719624627A410044AF20 /* Assets.xcassets */,
 				D250719B24627A410044AF20 /* LaunchScreen.storyboard */,
 				D250719E24627A410044AF20 /* Info.plist */,
@@ -108,6 +98,24 @@
 				D250719924627A410044AF20 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D2629B10247163B90022599B /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				D2A848CC24705B7E00393C2E /* PodcastRecordingView.swift */,
+				D2A848D22470857E00393C2E /* PodcastTranscriptionView.swift */,
+				D2629B0C24713CB00022599B /* PodcastSegmentView.swift */,
+				D2629B06247127D40022599B /* AudioComposer.swift */,
+				D2A848D42470877800393C2E /* AudioSegment.swift */,
+				D2629B0E24713D4C0022599B /* AudioSegmentPlayer.swift */,
+				D2A848D02470813F00393C2E /* AudioAnalyzer.swift */,
+				D2A848C82470534E00393C2E /* AudioRecorder.swift */,
+				D2A848CA247055AE00393C2E /* Error.swift */,
+				D2A848CE24706C1800393C2E /* PlaygroundHelper.swift */,
+				D2629B0324709A3B0022599B /* FlowLayout.swift */,
+			);
+			path = Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

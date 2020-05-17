@@ -143,7 +143,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
     }
   }
   
-  private var transcriptions = [TranscribedSegment]()
+  private var transcriptions = [AudioSegment]()
   
   func handleTranscription(result: SFSpeechRecognitionResult?, error: Error?) {
     if let result = result {

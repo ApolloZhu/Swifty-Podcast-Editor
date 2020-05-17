@@ -21,7 +21,7 @@ extension View {
 let player = AudioSegmentPlayer()
 
 struct SegmentView: View {
-  @Binding var segment: TranscribedSegment
+  @Binding var segment: AudioSegment
   @State private var offset: CGSize = .zero
   var locator: CollectionViewElementLocator
   var base: CGSize
@@ -35,15 +35,16 @@ struct SegmentView: View {
   var body: some View {
     HStack {
       Button(action: {
-        player.play(start: self.segment.start, end: self.segment.end)
+        player.play(segment: self.segment)
       }) {
         #if os(macOS)
-        Text("▶️")
+        Text(segment.isTranscribed ? "▶️" : "🗣")
         #else
         Image(systemName: "play.circle.fill")
+          .foregroundColor(segment.isTranscribed ? .blue : .green)
         #endif
       }
-      
+
       if showNoSuggestions {
         TextField("", text: $segment.text)
           .fixedSize()

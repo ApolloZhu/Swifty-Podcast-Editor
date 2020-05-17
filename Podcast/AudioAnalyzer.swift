@@ -51,7 +51,7 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     }
   }
   @Published
-  var segments: [TranscribedSegment] = [] {
+  var segments: [AudioSegment] = [] {
     willSet {
       set(fileURL.absoluteString, newValue)
     }
@@ -71,8 +71,11 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
       ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     super.init()
     if loadIfAvailable,
-      let previous = get(file.absoluteString, ofType: [TranscribedSegment].self) {
+      let previous = get(file.absoluteString, ofType: [AudioSegment].self) {
       segments = previous
+      segments.append(AudioSegment(text: "你好世界"))
+      segments.append(AudioSegment(text: "I don't know"))
+      segments.append(AudioSegment(text: "hoy es un hermoso dia"))
       state = .finished
       return
     }
@@ -105,7 +108,7 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     if let result = result {
       if result.isFinal {
         var transcriptions = result.bestTranscription.segments.map {
-          TranscribedSegment(
+          AudioSegment(
             text: $0.substring,
             alternatives: $0.alternativeSubstrings
               .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }

@@ -13,7 +13,6 @@
 		D250719A24627A410044AF20 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D250719924627A410044AF20 /* Preview Assets.xcassets */; };
 		D250719D24627A410044AF20 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D250719B24627A410044AF20 /* LaunchScreen.storyboard */; };
 		D2629B0524709C0D0022599B /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2629B0324709A3B0022599B /* FlowLayout.swift */; };
-		D2629B07247127D40022599B /* AudioComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2629B06247127D40022599B /* AudioComposer.swift */; };
 		D2629B0D24713CB00022599B /* PodcastSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2629B0C24713CB00022599B /* PodcastSegmentView.swift */; };
 		D2629B0F24713D4C0022599B /* AudioSegmentPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2629B0E24713D4C0022599B /* AudioSegmentPlayer.swift */; };
 		D29BD288246953D2002F35A6 /* punctuator.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = D29BD287246953D2002F35A6 /* punctuator.mlmodel */; };
@@ -35,7 +34,6 @@
 		D250719C24627A410044AF20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D250719E24627A410044AF20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2629B0324709A3B0022599B /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
-		D2629B06247127D40022599B /* AudioComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioComposer.swift; sourceTree = "<group>"; };
 		D2629B0C24713CB00022599B /* PodcastSegmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastSegmentView.swift; sourceTree = "<group>"; };
 		D2629B0E24713D4C0022599B /* AudioSegmentPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSegmentPlayer.swift; sourceTree = "<group>"; };
 		D29BD28624693A7E002F35A6 /* Podcast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Podcast.entitlements; sourceTree = "<group>"; };
@@ -83,7 +81,6 @@
 		D23F386C24716B4500D58D79 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				D2629B06247127D40022599B /* AudioComposer.swift */,
 				D2A848D42470877800393C2E /* AudioSegment.swift */,
 				D2629B0E24713D4C0022599B /* AudioSegmentPlayer.swift */,
 				D2A848D02470813F00393C2E /* AudioAnalyzer.swift */,
@@ -222,7 +219,6 @@
 				D29BD288246953D2002F35A6 /* punctuator.mlmodel in Sources */,
 				D2A848D32470857E00393C2E /* PodcastTranscriptionView.swift in Sources */,
 				D2A848D12470813F00393C2E /* AudioAnalyzer.swift in Sources */,
-				D2629B07247127D40022599B /* AudioComposer.swift in Sources */,
 				D2A848C92470534E00393C2E /* AudioRecorder.swift in Sources */,
 				D2A848CB247055AE00393C2E /* Error.swift in Sources */,
 				D2629B0D24713CB00022599B /* PodcastSegmentView.swift in Sources */,

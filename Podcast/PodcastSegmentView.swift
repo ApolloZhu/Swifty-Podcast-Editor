@@ -8,6 +8,16 @@
 
 import SwiftUI
 
+extension View {
+  fileprivate func styledTextSegment(backgroundColor: Color) -> some View {
+    self.padding(.leading, 20)
+      .padding(.trailing)
+      .padding(.vertical, 5)
+      .background(backgroundColor.opacity(0.3))
+      .cornerRadius(5)
+  }
+}
+
 struct SegmentView: View {
   @EnvironmentObject var player: AudioSegmentPlayer
   @Binding var segment: AudioSegment
@@ -30,7 +40,7 @@ struct SegmentView: View {
         Text(segment.isTranscribed ? "▶️" : "🗣")
         #else
         Image(systemName: "play.circle.fill")
-          .foregroundColor(segment.isTranscribed ? .blue : .green)
+          .foregroundColor(segment.isTranscribed ? .accentColor : .green)
         #endif
       }
 

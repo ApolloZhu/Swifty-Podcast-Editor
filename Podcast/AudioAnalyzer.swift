@@ -53,7 +53,9 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
   @Published
   var segments: [AudioSegment] = [] {
     willSet {
-      set(fileURL.absoluteString, newValue)
+      if newValue != segments {
+        cacheSegments(newValue)
+      }
     }
     didSet {
       if oldValue != segments {
@@ -61,7 +63,11 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
       }
     }
   }
-  
+
+  public func cacheSegments(_ segments: [AudioSegment]? = nil) {
+    set(fileURL.absoluteString, segments ?? self.segments)
+  }
+
   public let fileURL: URL
   private let speechRecognizer: SFSpeechRecognizer!
   
@@ -73,9 +79,6 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     if loadIfAvailable,
       let previous = get(file.absoluteString, ofType: [AudioSegment].self) {
       segments = previous
-      segments.append(AudioSegment(text: "你好世界"))
-      segments.append(AudioSegment(text: "I don't know"))
-      segments.append(AudioSegment(text: "hoy es un hermoso dia"))
       state = .finished
       return
     }

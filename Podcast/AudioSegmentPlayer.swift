@@ -48,21 +48,25 @@ public class AudioSegmentPlayer: ObservableObject {
     player.play()
   }
 
-  private let tagger = NLTagger(tagSchemes: [.language])
 }
 
 import NaturalLanguage
 
 extension AudioSegmentPlayer {
   private func generateSegment(_ segment: AudioSegment) {
-    tagger.string = segment.text
-
     let toSpeak = AVSpeechUtterance(string: segment.text)
-    toSpeak.voice = segment.alternatives.first
-      .flatMap(AVSpeechSynthesisVoice.init(identifier:))
-    if toSpeak.voice == nil, let lang = tagger.dominantLanguage?.rawValue {
-      toSpeak.voice = AVSpeechSynthesisVoice(language: lang)
-    }
+    toSpeak.voice
+      = segment.alternatives.first.flatMap(AVSpeechSynthesisVoice.init(identifier:))
+      ?? segment.text.dominantLanguage.flatMap(AVSpeechSynthesisVoice.init(language:))
+    synthesizer.stopSpeaking(at: .word)
     synthesizer.speak(toSpeak)
+  }
+}
+
+fileprivate let tagger = NLTagger(tagSchemes: [.language])
+extension String {
+  var dominantLanguage: String? {
+    tagger.string = self
+    return tagger.dominantLanguage?.rawValue
   }
 }

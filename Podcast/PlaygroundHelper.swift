@@ -43,6 +43,7 @@ func set<T: Codable>(_ key: String, _ value: T?) {
   } else {
     UserDefaults.standard.removeObject(forKey: key)
   }
+  UserDefaults.standard.synchronize()
 }
 #endif
 

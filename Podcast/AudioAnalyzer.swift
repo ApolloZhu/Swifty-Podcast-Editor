@@ -33,7 +33,7 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
 
   public enum State {
     case processing(String = "")
-    case finished(String)
+    case finished
     case errored(Error)
     case canNotTranscribe(NoTranscription)
   }
@@ -46,7 +46,17 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
       self.state = newState
     }
   }
-  
+  @Published
+  var segments: [AutoTranscriptionSegment] = [] {
+    willSet {
+      set("SEGMENTS", newValue)
+    }
+    didSet {
+      if oldValue != segments {
+        segments = segments.filter { !$0.text.isEmpty }
+      }
+    }
+  }
 
   private let fileURL: URL
   private let speechRecognizer: SFSpeechRecognizer!
@@ -58,6 +68,9 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     speechRecognizer = SFSpeechRecognizer()
       ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     super.init()
+    segments = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self)!
+    state = .finished
+    return
     guard let speechRecognizer = speechRecognizer else {
       setState(.canNotTranscribe(.localeNotSupported))
       return
@@ -84,18 +97,28 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
 
   private func handleTranscription(result: SFSpeechRecognitionResult?,
                                    error: Error?) {
-    let finished = result?.isFinal == true
-    let transcription = result?.bestTranscription.formattedString ?? ""
-    if finished {
-      setState(.finished(transcription))
-    } else {
-      setState(.processing(transcription))
+    if let result = result {
+      if result.isFinal {
+        segments = result.bestTranscription.segments.map {
+          AutoTranscriptionSegment(
+            text: $0.substring,
+            alternatives: $0.alternativeSubstrings
+              .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+              .filter { !$0.isEmpty },
+            start: $0.timestamp,
+            duration: $0.duration
+          )
+        }
+        setState(.finished)
+      } else {
+        setState(.processing(result.bestTranscription.formattedString))
+      }
     }
     if let error = error {
       setState(.errored(error))
     }
-    //    print(result?.bestTranscription.formattedString)
-    //    print(error)
+    // print(result?.bestTranscription.formattedString)
+    // print(error)
   }
   
   public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer,

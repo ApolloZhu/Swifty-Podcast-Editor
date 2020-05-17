@@ -13,3 +13,16 @@ public struct AudioSegment: Codable {
   var start: TimeInterval
   var duration: TimeInterval
 }
+
+public struct AutoTranscriptionSegment: Codable, Equatable, Identifiable {
+  public let id = UUID()
+  var text: String {
+    didSet {
+      modified = true
+    }
+  }
+  var modified: Bool = false
+  let alternatives: [String]
+  let start: TimeInterval
+  let duration: TimeInterval
+}

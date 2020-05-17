@@ -12,6 +12,7 @@
 		D250719724627A410044AF20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D250719624627A410044AF20 /* Assets.xcassets */; };
 		D250719A24627A410044AF20 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D250719924627A410044AF20 /* Preview Assets.xcassets */; };
 		D250719D24627A410044AF20 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D250719B24627A410044AF20 /* LaunchScreen.storyboard */; };
+		D2629B0524709C0D0022599B /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2629B0324709A3B0022599B /* FlowLayout.swift */; };
 		D29BD288246953D2002F35A6 /* punctuator.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = D29BD287246953D2002F35A6 /* punctuator.mlmodel */; };
 		D2A848C92470534E00393C2E /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A848C82470534E00393C2E /* AudioRecorder.swift */; };
 		D2A848CB247055AE00393C2E /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A848CA247055AE00393C2E /* Error.swift */; };
@@ -30,6 +31,7 @@
 		D250719924627A410044AF20 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D250719C24627A410044AF20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D250719E24627A410044AF20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D2629B0324709A3B0022599B /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		D29BD28624693A7E002F35A6 /* Podcast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Podcast.entitlements; sourceTree = "<group>"; };
 		D29BD287246953D2002F35A6 /* punctuator.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = punctuator.mlmodel; path = utils/punctuator.mlmodel; sourceTree = SOURCE_ROOT; };
 		D2A848C82470534E00393C2E /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				D2A848C82470534E00393C2E /* AudioRecorder.swift */,
 				D2A848CA247055AE00393C2E /* Error.swift */,
 				D2A848CE24706C1800393C2E /* PlaygroundHelper.swift */,
+				D2629B0324709A3B0022599B /* FlowLayout.swift */,
 				D250719624627A410044AF20 /* Assets.xcassets */,
 				D250719B24627A410044AF20 /* LaunchScreen.storyboard */,
 				D250719E24627A410044AF20 /* Info.plist */,
@@ -169,6 +172,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2629B0524709C0D0022599B /* FlowLayout.swift in Sources */,
 				D250719124627A400044AF20 /* AppDelegate.swift in Sources */,
 				D250719324627A400044AF20 /* SceneDelegate.swift in Sources */,
 				D2A848D52470877800393C2E /* AudioSegment.swift in Sources */,

@@ -18,8 +18,49 @@ struct PodcastTranscriptionView: View {
   @ObservedObject private var analyzer = AudioAnalyzer()
   @ObservedObject private var player = AudioSegmentPlayer()
   @State private var newText: String = ""
-  @State private var showAlert: Bool = false
+  @State private var showVoiceChooser: Bool = false
   @State private var voices = AVSpeechSynthesisVoice.speechVoices()
+
+  var inputNew: some View {
+    VStack {
+      Spacer()
+      TextField(
+        "Enter new text to be spoken", text: self.$newText,
+        onCommit: {
+          if let language = self.newText.dominantLanguage {
+            self.voices = AVSpeechSynthesisVoice.speechVoices()
+              .filter { $0.language.hasPrefix(language)
+                || $0.language.hasPrefix(language.split(separator: "-")[0]) }
+              .sorted { $0.quality.rawValue >= $1.quality.rawValue
+                || $0.name < $1.name }
+            if self.voices.count < 2 {
+              self.appendAudioSegment()
+            } else {
+              self.showVoiceChooser = true
+            }
+          } else {
+            self.appendAudioSegment()
+          }
+      })
+        .padding()
+        .background(Color.purple.opacity(0.5))
+        .actionSheet(isPresented: self.$showVoiceChooser) {
+          return ActionSheet(
+            title: Text("Select a \(Locale.displayName(for: self.newText.dominantLanguage ?? "")) Voice"),
+            message: Text("Choose a voice to speak this text"),
+            buttons: self.voices.map { voice in
+              ActionSheet.Button.default(Text(voice.name)) {
+                self.appendAudioSegment(voice: voice)
+              }
+              } + [
+                ActionSheet.Button.default(Text("Use Default")) {
+                  self.appendAudioSegment()
+                }
+            ]
+          )
+      }
+    }
+  }
 
   var body: some View {
     switch analyzer.state {
@@ -44,44 +85,7 @@ struct PodcastTranscriptionView: View {
             }
             .padding()
 
-            VStack {
-              Spacer()
-              TextField(
-                "Enter new text to be spoken", text: self.$newText,
-                onCommit: {
-                  if let language = self.newText.dominantLanguage {
-                    self.voices = AVSpeechSynthesisVoice.speechVoices()
-                      .filter { $0.language.hasPrefix(language)
-                        || $0.language.hasPrefix(language.split(separator: "-")[0]) }
-                      .sorted { $0.quality.rawValue >= $1.quality.rawValue
-                        || $0.name < $1.name }
-                    if self.voices.count < 2 {
-                      self.appendAudioSegment()
-                    } else {
-                      self.showAlert = true
-                    }
-                  } else {
-                    self.appendAudioSegment()
-                  }
-              })
-                .padding()
-                .background(Color.purple.opacity(0.5))
-                .actionSheet(isPresented: self.$showAlert) {
-                  return ActionSheet(
-                    title: Text("Select a \(Locale.displayName(for: self.newText.dominantLanguage ?? "")) Voice"),
-                    message: Text("Choose a voice to speak this text"),
-                    buttons: self.voices.map { voice in
-                      ActionSheet.Button.default(Text(voice.name)) {
-                        self.appendAudioSegment(voice: voice)
-                      }
-                      } + [
-                        ActionSheet.Button.default(Text("Use Default")) {
-                          self.appendAudioSegment()
-                        }
-                    ]
-                  )
-              }
-            }
+            self.inputNew
           }
         }
         .environmentObject(player)

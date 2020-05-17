@@ -27,7 +27,6 @@ public struct PodcastTranscriptionView: View {
   @State private var showVoiceChooser: Bool = false
   @State private var voices = AVSpeechSynthesisVoice.speechVoices()
 
-
   var inputTextField: some View {
     TextField(
       "Enter new text to be spoken", text: self.$newText,
@@ -49,6 +48,12 @@ public struct PodcastTranscriptionView: View {
     })
       .padding()
       .background(Color.purple.opacity(0.5))
+  }
+
+  var playAll: some View {
+    Button("Listen") {
+      self.player.play(segments: self.analyzer.segments)
+    }
   }
 
   var inputNew: some View {
@@ -80,12 +85,14 @@ public struct PodcastTranscriptionView: View {
         .padding()
         .background(Color.white)
       } else {
+        playAll
         inputTextField
       }
     }
     #else
     return VStack {
       Spacer()
+      playAll
       inputTextField
         .actionSheet(isPresented: self.$showVoiceChooser) {
           return ActionSheet(

@@ -111,14 +111,16 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
                                    error: Error?) {
     if let result = result {
       if result.isFinal {
-        var transcriptions = result.bestTranscription.segments.map {
+        var transcriptions = result.bestTranscription.segments.enumerated().map {
+          index, segment in
           AudioSegment(
-            text: $0.substring,
-            alternatives: $0.alternativeSubstrings
+            text: segment.substring,
+            alternatives: segment.alternativeSubstrings
               .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
               .filter { !$0.isEmpty },
-            start: $0.timestamp,
-            duration: $0.duration
+            originalIndex: index,
+            start: segment.timestamp,
+            duration: segment.duration
           )
         }
         if !transcriptions.isEmpty {
@@ -139,7 +141,6 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
           if transcriptions.last!.text.hasSuffix(".") != true {
             transcriptions[transcriptions.indices.last!].text += "."
           }
-          
         }
         segments = transcriptions
         setState(.finished)

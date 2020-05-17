@@ -30,19 +30,26 @@ class AudioComposer: ObservableObject {
     self.init(analyzer: AudioAnalyzer(analyzing: fileURL))
   }
 
+  private var segments = [AudioSegment]() {
+    didSet {
+//      composeAudio(oldSegments: oldValue, newSegments: segments)
+    }
+  }
+
   private lazy var subscription: AnyCancellable =
     analyzer.publisher(for: \.segments)
       .receive(on: DispatchQueue.main)
-      .sink(receiveValue: composeAudio)
+      .assign(to: \.segments, on: self)
 
   deinit {
     subscription.cancel()
   }
 
+  let composition = AVMutableComposition()
+
   init(analyzer: AudioAnalyzer) {
     self.analyzer = analyzer
     _ = subscription
-    let composition = AVMutableComposition()
     let asset = AVAsset(url: analyzer.fileURL)
     do {
       try composition.insertTimeRange(
@@ -53,14 +60,7 @@ class AudioComposer: ObservableObject {
       setState(.errored(error))
     }
 
-
-    //
-    //    // now edit as required, e.g. delete a time range
-    //    let startTime = CMTime(seconds: endTimeOfRange1, preferredTimescale: 100)
-    //    let endTime = CMTime(seconds: startTimeOfRange2, preferredTimescale: 100)
-    //    composition.removeTimeRange( CMTimeRangeFromTimeToTime( startTime, endTime))
-    //
-    //    // since AVMutableComposition is an AVAsset subclass, it can be exported with AVAssetExportSession (or played with an AVPlayer(Item))
+    // since AVMutableComposition is an AVAsset subclass, it can be exported with AVAssetExportSession (or played with an AVPlayer(Item))
     //    if let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetAppleM4A)
     //    {
     //        // configure session and exportAsynchronously as above.
@@ -68,9 +68,15 @@ class AudioComposer: ObservableObject {
     //    }
   }
 
-  private func composeAudio(_ segments: [AudioSegment]) {
-    for segment in segments {
-      
-    }
-  }
+//  private func composeAudio(oldSegments: [AudioSegment], newSegments: [AudioSegment]) {
+//    let diff = newSegments.difference(from: oldSegments).inferringMoves()
+//    for difference in diff {
+//      switch difference {
+//      case .insert(offset: let offset, element: let element, associatedWith: _):
+//        try? composition.insertTimeRange(<#T##timeRange: CMTimeRange##CMTimeRange#>, of: <#T##AVAsset#>, at: <#T##CMTime#>)
+//      case .remove(offset: let offset, element: let element, associatedWith: _):
+//        composition.removeTimeRange(<#T##timeRange: CMTimeRange##CMTimeRange#>)
+//      }
+//    }
+//  }
 }

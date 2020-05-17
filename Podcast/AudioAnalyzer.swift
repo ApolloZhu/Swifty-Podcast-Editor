@@ -20,7 +20,7 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     case noOnDevice
     case noPermission
     case temporary
-
+    
     public var localizedDescription: String {
       switch self {
       case .localeNotSupported:
@@ -34,14 +34,14 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
       }
     }
   }
-
+  
   public enum State {
     case processing(String = "")
     case finished
     case errored(Error)
     case canNotTranscribe(NoTranscription)
   }
-
+  
   @Published
   var state: State = .processing()
   private func setState(_ newState: State) {
@@ -61,18 +61,18 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
       }
     }
   }
-
+  
   private let fileURL: URL
   private let speechRecognizer: SFSpeechRecognizer!
-
+  
   public init(analyzing file: URL = defaultURL) {
     fileURL = file
     speechRecognizer = SFSpeechRecognizer()
       ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     super.init()
-    // segments = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self)!
-    // state = .finished
-    // return
+    segments = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self)!
+    state = .finished
+    return
     guard let speechRecognizer = speechRecognizer else {
       setState(.canNotTranscribe(.localeNotSupported))
       return
@@ -96,7 +96,7 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
       }
     }
   }
-
+  
   private func handleTranscription(result: SFSpeechRecognitionResult?,
                                    error: Error?) {
     if let result = result {
@@ -116,7 +116,7 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
           let average = max(result.bestTranscription.averagePauseDuration, 0.1)
           let threshold = average / 3
           // print(threshold)
-
+          
           // Add punctuations, not the smartest way though.
           for i in transcriptions.indices.dropLast() {
             let difference = transcriptions[i + 1].start - transcriptions[i].end
@@ -127,11 +127,11 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
               transcriptions[i].text += ","
             }
           }
-
+          
           if transcriptions.last!.text.hasSuffix(".") != true {
             transcriptions[transcriptions.indices.last!].text += "."
           }
-
+          
         }
         segments = transcriptions
         setState(.finished)

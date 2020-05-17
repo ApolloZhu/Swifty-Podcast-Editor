@@ -70,9 +70,9 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     speechRecognizer = SFSpeechRecognizer()
       ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     super.init()
- segments = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self)!
- state = .finished
- return
+// segments = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self)!
+// state = .finished
+// return
     guard let speechRecognizer = speechRecognizer else {
       setState(.canNotTranscribe(.localeNotSupported))
       return

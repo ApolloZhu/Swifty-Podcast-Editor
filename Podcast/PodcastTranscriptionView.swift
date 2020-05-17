@@ -25,7 +25,7 @@ struct SegmentView: View {
 
   var showNoSuggestions: Bool {
     return segment.alternatives.isEmpty
-    || segment.modified
+      || segment.modified
   }
 
   var body: some View {
@@ -46,11 +46,14 @@ struct SegmentView: View {
           Image(systemName: "doc.plaintext")
         }
         .contextMenu {
-            ForEach(segment.alternatives, id: \.self) { alternative in
-              Button(alternative) {
-                self.segment.text = alternative
-              }
+          Button(segment.text) {
+            self.segment.modified = true
+          }
+          ForEach(segment.alternatives, id: \.self) { alternative in
+            Button(alternative) {
+              self.segment.text = alternative
             }
+          }
         }
       }
     }

@@ -59,32 +59,26 @@ public struct PodcastTranscriptionView: View {
         Group {
           Text("Select a \(Locale.displayName(for: self.newText.dominantLanguage ?? "")) Voice")
             .font(.title)
+          .frame(maxWidth: .infinity)
           Text("Choose a voice to speak this text")
+            .frame(maxWidth: .infinity)
           ScrollView(.horizontal, showsIndicators: false) {
             HStack {
               Button("Use Default") {
                 self.showVoiceChooser = false
                 self.appendAudioSegment()
               }
-              .foregroundColor(.primary)
-              .padding()
-              .background(Color.accentColor.opacity(0.5))
-              .cornerRadius(5)
-              .fixedSize()
               ForEach(voices, id: \.identifier) { voice in
                 Button(voice.name) {
                   self.showVoiceChooser = false
                   self.appendAudioSegment(voice: voice)
                 }
-                .padding()
-                .background(Color.gray.opacity(0.5))
-                .cornerRadius(5)
-                .fixedSize()
               }
             }
           }
         }
         .padding()
+        .background(Color.white)
       } else {
         inputTextField
       }
@@ -155,6 +149,7 @@ public struct PodcastTranscriptionView: View {
   }
 
   func appendAudioSegment(voice: AVSpeechSynthesisVoice? = nil) {
+    if self.newText.isEmpty { return }
     self.analyzer.segments.append(AudioSegment(
       text: self.newText,
       voiceIdentifier: voice?.identifier

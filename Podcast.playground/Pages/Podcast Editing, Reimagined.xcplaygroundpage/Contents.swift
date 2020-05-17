@@ -2,10 +2,10 @@ import SwiftUI
 
 let previewWidth: CGFloat = 1000
 let previewHeight: CGFloat = 700
-let reTranscribe: Bool = false
+let alwaysReTranscribe: Bool = false
 
 showPodcastEditor(
-  reTranscribe: reTranscribe,
+  reTranscribe: alwaysReTranscribe,
   width: previewWidth,
   height: previewHeight
 )

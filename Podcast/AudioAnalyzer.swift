@@ -12,7 +12,7 @@ import Speech
 import NaturalLanguage
 
 public let defaultURL = playgroundSharedDataDirectory
-.appendingPathComponent(AudioRecorder.defaultFileName + ".caf")
+  .appendingPathComponent(AudioRecorder.defaultFileName + ".caf")
 
 public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelegate {
   public enum NoTranscription {
@@ -45,7 +45,7 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
   @Published
   var state: State = .processing()
   private func setState(_ newState: State) {
-    dump(newState)
+    // dump(newState)
     DispatchQueue.main.async {
       self.state = newState
     }
@@ -70,9 +70,9 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     speechRecognizer = SFSpeechRecognizer()
       ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     super.init()
-// segments = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self)!
-// state = .finished
-// return
+    // segments = get("SEGMENTS", ofType: [AutoTranscriptionSegment].self)!
+    // state = .finished
+    // return
     guard let speechRecognizer = speechRecognizer else {
       setState(.canNotTranscribe(.localeNotSupported))
       return
@@ -101,7 +101,7 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
                                    error: Error?) {
     if let result = result {
       if result.isFinal {
-        print(result.bestTranscription.formattedString)
+        // print(result.bestTranscription.formattedString)
         var transcriptions = result.bestTranscription.segments.map {
           AutoTranscriptionSegment(
             text: $0.substring,
@@ -115,7 +115,7 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
         if !transcriptions.isEmpty {
           let average = max(result.bestTranscription.averagePauseDuration, 0.1)
           let threshold = average / 3
-          print(threshold)
+          // print(threshold)
 
           // Add punctuations, not the smartest way though.
           for i in transcriptions.indices.dropLast() {
@@ -136,7 +136,7 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
         segments = transcriptions
         setState(.finished)
       } else {
-        dump(result.bestTranscription.segments)
+        // dump(result.bestTranscription.segments)
         setState(.processing(result.bestTranscription.formattedString))
       }
     }

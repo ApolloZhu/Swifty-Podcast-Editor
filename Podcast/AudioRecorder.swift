@@ -18,7 +18,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
   public private(set) var state: State = .finished
   
   private func setState(_ newState: State) {
-    dump(newState)
+    // dump(newState)
     switch state {
     case .canNotTranscribe(let reason):
       switch reason {
@@ -108,7 +108,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
   private func startRecording(to file: String) {
     let file = file.hasSuffix(".caf") ? file : file + ".caf"
     let fileURL = playgroundSharedDataDirectory.appendingPathComponent(file)
-    print(fileURL.absoluteString)
+    // print(fileURL.absoluteString)
 
     // Create and configure the speech recognition request.
     recognitionRequest = SFSpeechAudioBufferRecognitionRequest()

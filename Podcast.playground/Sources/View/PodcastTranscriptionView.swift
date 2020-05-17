@@ -157,10 +157,18 @@ public struct PodcastTranscriptionView: View {
 
   func appendAudioSegment(voice: AVSpeechSynthesisVoice? = nil) {
     if self.newText.isEmpty { return }
-    self.analyzer.segments.append(AudioSegment(
-      text: self.newText,
-      voiceIdentifier: voice?.identifier
-    ))
+    self.newText.enumerateSubstrings(
+      in: self.newText.startIndex...,
+      options: .bySentences
+    ) { (sentence, _, _, _) in
+        guard let sentence = sentence?.trimmingCharacters(in: .whitespacesAndNewlines),
+          !sentence.isEmpty
+          else { return print("WEIRD") }
+        self.analyzer.segments.append(AudioSegment(
+          text: sentence,
+          voiceIdentifier: voice?.identifier
+        ))
+    }
     self.analyzer.cacheSegments()
     self.newText = ""
   }

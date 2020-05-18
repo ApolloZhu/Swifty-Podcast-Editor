@@ -22,7 +22,7 @@ import SwiftUI
 
  Since our frames are sorted, there's faster way called binary search, which is conventionally applied to a sequence of sorted numbers. You compare the number with the middle point, if it's the same, you found the point. If your number is smaller, do this again on the left side; otherwise (if larger), try this again on the other side. Here's an example from [Wikipedia](https://commons.wikimedia.org/wiki/File:Binary_Search_Depiction.svg):
 
- ![searching by dividing in half](BinarySearchWiki.png)
+ ![searching by dividing in half](BinarySearchWiki.png "Binary Search Depiction by AlwaysAngry under CC BY-SA License")
 
  But since our frames are 2D -- having Xs and Ys, we can't just copy over the binary search code for one dimensional sequence of numbers. What we have to do instead is combing 2 binary searches: first binary search along the vertical axis, then among the horizontal axis:
  */
@@ -76,16 +76,15 @@ func insertionIndex(for point: CGPoint, into frames: [CGRect]) -> Int? {
       return mid
     }
   }
-//: Now we searched for where exactly it should go, return it.
   return j
 }
 /*:
-And that's how you would binary search in a 2D space! Since time is almost up, let's [summarize what we have seen](@next).
+
+ As you can see in the video demonstration, this is much faster! As a matter of fact, its complexity is O(log n), meaning that even if we have 1000 segments, it only needs at most 10 tries to find the right position we should move the audio segment to!
+
+ ![searching for insertion position, eliminate half each time](BinarySearch.m4v poster="BinarySearchCover.png" width="960" height="540")
 
 ---
 
- By the way, because the project is written entirely in SwiftUI, it's fully cross platform! Here's a screenshot of it running on my phone:
-
-![Swifty Podcast Editor on iPhone X](iOS.png)
-
+ Now you learned how you can binary search in a 2D space, let's [summarize what we have seen today](@next).
 */

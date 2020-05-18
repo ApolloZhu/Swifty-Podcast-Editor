@@ -6,10 +6,17 @@ public func showPodcastEditor(
   width: CGFloat,
   height: CGFloat
 ) {
-  let view = PodcastTranscriptionView(reTranscribe: reTranscribe)
-  let controller = NSHostingController(rootView: view)
-  controller.view.frame = CGRect(
-    x: 0, y: 0, width: width, height: height
-  )
-  PlaygroundPage.current.liveView = controller
+  if defaultAudioURL.fileExists {
+    let view = PodcastTranscriptionView(reTranscribe: reTranscribe)
+    let controller = NSHostingController(rootView: view)
+    controller.view.frame = CGRect(
+      x: 0, y: 0, width: width, height: height
+    )
+    PlaygroundPage.current.liveView = controller
+  } else {
+    PlaygroundPage.current.liveView = NSHostingController(rootView:
+      Text("Please record audio first")
+        .foregroundColor(.red)
+    )
+  }
 }

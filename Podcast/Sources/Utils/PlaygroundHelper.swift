@@ -8,12 +8,18 @@
 
 import Foundation
 
+extension URL {
+  var fileExists: Bool {
+    return FileManager.default.fileExists(atPath: path)
+  }
+}
+
 #if canImport(PlaygroundSupport)
 import PlaygroundSupport
 
 let playgroundSharedDataDirectory: URL = {
   let url = PlaygroundSupport.playgroundSharedDataDirectory
-  if !FileManager.default.fileExists(atPath: url.path) {
+  if !url.fileExists {
     try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
   }
   return url
@@ -55,4 +61,3 @@ public func set<T: Codable>(_ key: String, _ value: T?) {
   }
   UserDefaults.standard.synchronize()
 }
-

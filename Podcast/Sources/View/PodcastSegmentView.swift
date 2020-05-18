@@ -38,9 +38,11 @@ struct SegmentView: View {
       }) {
         #if os(macOS)
         Text(segment.isTranscribed ? "▶️" : "🗣")
+          .accessibility(label: Text("Play Segment"))
         #else
         Image(systemName: "play.circle.fill")
           .foregroundColor(segment.isTranscribed ? .accentColor : .green)
+          .accessibility(label: Text("Play Segment"))
         #endif
       }
       .buttonStyle(PlainButtonStyle())
@@ -65,6 +67,7 @@ struct SegmentView: View {
               }
             }
           }.menuButtonStyle(BorderlessButtonMenuButtonStyle())
+            .accessibility(label: Text("Reveal Alternatives"))
         }
         #else
         HStack {
@@ -72,6 +75,7 @@ struct SegmentView: View {
             .textFieldStyle(PlainTextFieldStyle())
             .fixedSize()
           Image(systemName: "doc.plaintext")
+            .accessibility(label: Text("Reveal Alternatives"))
         }
         .contextMenu {
           Button(segment.text) {

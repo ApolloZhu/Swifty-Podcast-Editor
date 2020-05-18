@@ -1,4 +1,5 @@
 //: # Binary Search
+//: - Important: This page has neither visible results nor a live view
 import SwiftUI
 /*:
 

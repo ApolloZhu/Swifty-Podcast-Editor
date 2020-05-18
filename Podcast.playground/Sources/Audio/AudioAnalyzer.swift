@@ -73,8 +73,8 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
   
   public init(analyzing file: URL = defaultAudioURL, loadIfAvailable: Bool = true) {
     fileURL = file
-    speechRecognizer = SFSpeechRecognizer()
-      ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+    speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+      ?? SFSpeechRecognizer()
     super.init()
     if loadIfAvailable,
       let previous = get(file.absoluteString, ofType: [AudioSegment].self),

@@ -47,8 +47,8 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
   private var recognitionTask: SFSpeechRecognitionTask?
   
   public override init() {
-    speechRecognizer = SFSpeechRecognizer()
-      ?? SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+    speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+      ?? SFSpeechRecognizer()
     super.init()
     speechRecognizer?.delegate = self
   }
@@ -97,7 +97,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
     requestRecognition(fileName: fileName)
     #endif
   }
-
+  
   private func requestRecognition(fileName: String) {
     SFSpeechRecognizer.requestAuthorization { [weak self] authStatus in
       guard let self = self else { return }
@@ -116,7 +116,7 @@ public class AudioRecorder: NSObject, ObservableObject, SFSpeechRecognizerDelega
     let file = file.hasSuffix(".caf") ? file : file + ".caf"
     let fileURL = playgroundSharedDataDirectory.appendingPathComponent(file)
     set(fileURL.absoluteString, [AudioSegment]())
-
+    
     // Create and configure the speech recognition request.
     recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
     recognitionRequest.shouldReportPartialResults = true

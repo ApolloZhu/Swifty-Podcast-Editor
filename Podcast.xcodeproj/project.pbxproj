@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D22A9C8C247236530032DB00 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22A9C8B247236530032DB00 /* ContentView.swift */; };
 		D250719124627A400044AF20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D250719024627A400044AF20 /* AppDelegate.swift */; };
 		D250719324627A400044AF20 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D250719224627A400044AF20 /* SceneDelegate.swift */; };
 		D250719724627A410044AF20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D250719624627A410044AF20 /* Assets.xcassets */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D22A9C8B247236530032DB00 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D250718D24627A400044AF20 /* Podcast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Podcast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D250719024627A400044AF20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D250719224627A400044AF20 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				D29BD28624693A7E002F35A6 /* Podcast.entitlements */,
 				D250719024627A400044AF20 /* AppDelegate.swift */,
 				D250719224627A400044AF20 /* SceneDelegate.swift */,
+				D22A9C8B247236530032DB00 /* ContentView.swift */,
 				D2629B10247163B90022599B /* Sources */,
 				D250719624627A410044AF20 /* Assets.xcassets */,
 				D250719B24627A410044AF20 /* LaunchScreen.storyboard */,
@@ -212,6 +215,7 @@
 			files = (
 				D2629B0524709C0D0022599B /* FlowLayout.swift in Sources */,
 				D250719124627A400044AF20 /* AppDelegate.swift in Sources */,
+				D22A9C8C247236530032DB00 /* ContentView.swift in Sources */,
 				D250719324627A400044AF20 /* SceneDelegate.swift in Sources */,
 				D2629B0F24713D4C0022599B /* AudioSegmentPlayer.swift in Sources */,
 				D2A848D52470877800393C2E /* AudioSegment.swift in Sources */,

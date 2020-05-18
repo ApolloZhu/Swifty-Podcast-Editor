@@ -1,16 +1,25 @@
 /*:
  # Final Words
 
- 
+ You've seen that we can automatically convert spoken audio to written text:
 
+ ![real time transcription](Transcription.mov)
 
+ as well as the innovative editor that makes it a lot easier to work with audio:
 
+ ![editing audio by editing text](Editor.mov)
 
- Before you go, I want to introduce you
- */
+ Because the project is written entirely in SwiftUI, it's fully cross platform! Here's a screenshot of it running on my phone:
+
+ ![Swifty Podcast Editor on iPhone X](iOS.png)
+
+ ---
+
+ Lastly, before you go, I want to introduce you to:
+*/
 import NaturalLanguage
 /*:
- It helped us tokenizing sentences when you insert new synthesized audio segments. But it can also analyze sentiments:
+ This framework helped us tokenizing sentences when you insert new synthesized audio segments, as well as detecting their language so we can pick a relevant synthesizer. Interestingly though, it knows our emotions:
  */
 func analyze(_ text: String) -> Double {
   let tagger = NLTagger(tagSchemes: [.sentimentScore])
@@ -35,10 +44,6 @@ visualizeSentiment(
   scored: analyze(iThinkThisPlaygroundIs)
 )
 /*:
- By the way, because the project is written entirely in SwiftUI, it's fully cross platform! Here's a screenshot of it running on my phone:
-
- ![Swifty Podcast Editor on iPhone X](iOS.png)
-
  ## `deinit`
 
  Anyways, thank you for your time, hope you have learned and discovered something new, and have a nice day!

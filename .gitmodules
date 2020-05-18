@@ -1,3 +1,0 @@
-[submodule "utils/lib"]
-	path = utils/lib
-	url = https://github.com/vackosar/keras-punctuator.git

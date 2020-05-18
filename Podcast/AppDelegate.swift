@@ -14,16 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
-    do {
-      let arr = try MLMultiArray.init(shape: [1, 30], dataType: .float32)
-      let ints = [1981, 12531, 12, 209, 42, 360, 7212, 96, 19999, 796, 3, 10, 8841, 7481, 7228, 464, 42, 177, 19999, 362, 425, 3, 2191, 206, 3, 19, 42, 132, 17094, 60]
-      for i in 0..<arr.count {
-        arr[i] = NSNumber(value: ints[i])
-      }
-      print(try punctuator().prediction(embedding_1_input: arr).dense_1_Softmax)
-    } catch {
-      print(error)
-    }
     return true
   }
   

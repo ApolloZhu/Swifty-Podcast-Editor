@@ -1,18 +1,15 @@
-//: # Technical Details
+//: # Binary Search
 import SwiftUI
 /*:
- For those curious minds, we used SwiftUI for the user interface; AVFoundation for the audio recording, processing, and playback; SFSpeechRecognizer for transcription; and AVSpeechSynthesizer for generation. But I also used an algorithm called
 
- ## Binary Search
+ We don't always think algorithms are that useful. However, to enable rearranging audio segments using drag and drop, I'm using binary search to quickly find the insertion index.
 
  I used
- [collection view flow layout by Chris Eidhof](https://gist.github.com/chriseidhof/3c6ea3fb2102052d1898d8ea27fbee07), which does a great job in laying out the segments. However, it doesn't know how to rearrange the items when dragged around. From a drag gesture recognizer, we could get the current cursor position. But how do we translate that to the new index of the dragged segment?
-
- When laying out the segments, we now save all their frame rectangles (which is their location and size) in order.
+ [collection view flow layout by Chris Eidhof](https://gist.github.com/chriseidhof/3c6ea3fb2102052d1898d8ea27fbee07), which does a great job in laying out the segments. However, it doesn't know how to rearrange the items when dragged around, so it's really up to use to figure it out. From a drag gesture recognizer, we could get the current cursor position. But how do we translate that to the new index of the dragged segment?
 
  ### Linear Search
 
- The "simplest way" to locate it would be checking against them one by one until found the appropriate location. However, this has an `O(n)` runtime, which means if you have X number of segments in your podcast, it needs to check X number of times.
+ The "simplest way" to locate it would be checking against the frame rectangles (location + size) of the audio segments one by one until found the appropriate location. However, this has an `O(n)` runtime, which means if you have X number of segments in your podcast, it needs to check X number of times.
 
  ![searching for insertion position, one by one](LinearSearch.m4v poster="LinearSearchCover.png" width="960" height="540")
 

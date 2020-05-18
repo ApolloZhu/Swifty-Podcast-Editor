@@ -1,5 +1,5 @@
 /*:
- # Final Words
+ # Summary
 
  You've seen that we can automatically convert spoken audio to written text:
 
@@ -13,13 +13,13 @@
 
  ![Swifty Podcast Editor on iPhone X](iOS.png)
 
- ---
-
- Lastly, before you go, I want to introduce you to:
+ You've also seen:
 */
 import NaturalLanguage
 /*:
- This framework helped us tokenizing sentences when you insert new synthesized audio segments, as well as detecting their language so we can pick a relevant synthesizer. Interestingly though, it knows our emotions:
+ helping us tokenizing sentences when you insert new synthesized audio segments, detecting their language so we can pick a relevant synthesizer.
+
+ > But interestingly though, it understands our emotions as well:
  */
 func analyze(_ text: String) -> Double {
   let tagger = NLTagger(tagSchemes: [.sentimentScore])
@@ -33,7 +33,9 @@ func analyze(_ text: String) -> Double {
     .compactMap(Double.init)
   return scores.reduce(0, +) / Double(scores.count)
 }
-//: So let me know how you think of my playground ;)
+//: With that, we could potentially pick synthetic voices based on the sentiment of the text we are about to insert. But for today,
+//: - Example:
+//: let me know how you think of my playground ;)
 let iThinkThisPlaygroundIs = """
 
 Loved it, great work!

@@ -3,9 +3,9 @@
 > Tell us about the features and technologies you used in your Swift playground.
 
 - `SwiftUI`: using SwiftUI (and platform detection compiler directives), I'm able t create a universal app from my single code base that runs on macOS (native), Mac Catalyst, and on iOS devices as well!
-- SF Symbols: on platforms supporting SFSymbols, I use `Image(systemName:)`. Otherwise, I fallback to using emojis :P
+- SF Symbols: on platforms supporting SFSymbols, I use `Image(systemName:)`. Otherwise, I fall back to using emojis :P
 - `Combine`: managing data flow between the objects and updating the UI state when transcriptions become available.
-- `SFSpeechRecognizer`: this empowers me to get the automatic transcription for audio files.
+- `SFSpeechRecognizer`: this empowers me to get the automatic transcription for audio files ON DEVICE, a new feature introduced last year at WWDC19.
 - `AVSpeechSynthesizer`: to generate synthesized audio for including in podcast.
 - `NaturalLanguage`: finding the dominant language of the user input text so I can filter the synthesizer voices, splitting long paragraphs into sentences before insertion, and sentiment analysis for fun.
 - `AVAudioEngine`, `AVAudioPlayer`: for recording and playing sound.

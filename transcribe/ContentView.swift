@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+import Foundation
 import UniformTypeIdentifiers
 
 struct ContentView: View {
@@ -22,6 +22,7 @@ struct ContentView: View {
           Text(text)
         }
       case .finished:
+        VStack {
         Button("Export", action: { isExporting = true })
           .fileExporter(isPresented: $isExporting,
                         document: TextDocument(text: analyzer.segments
@@ -34,6 +35,14 @@ struct ContentView: View {
               print("Error: \(error)")
             }
           }
+          List(analyzer.segments) { segment in
+            HStack {
+              Text("\(segment.start.formatted) - \(segment.end.formatted)")
+                .font(.system(.body, design: .monospaced))
+              Text(segment.text)
+            }
+          }
+        }
       case .errored(let error):
         Text(error.localizedDescription)
       case .canNotTranscribe(let reason):

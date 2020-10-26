@@ -19,7 +19,7 @@ struct TranscribeApp: App {
           .environmentObject(
             AudioAnalyzer(
               analyzing: url,
-              loadIfAvailable: false,
+              loadIfAvailable: true,
               contextualStrings: Array(Set(note
                 .components(separatedBy: .whitespacesAndNewlines)
                 .flatMap({ $0.components(separatedBy: .punctuationCharacters) })

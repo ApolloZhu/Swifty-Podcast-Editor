@@ -35,6 +35,7 @@
 		D2A848D12470813F00393C2E /* AudioAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A848D02470813F00393C2E /* AudioAnalyzer.swift */; };
 		D2A848D32470857E00393C2E /* PodcastTranscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A848D22470857E00393C2E /* PodcastTranscriptionView.swift */; };
 		D2A848D52470877800393C2E /* AudioSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A848D42470877800393C2E /* AudioSegment.swift */; };
+		D2C4234B2546BDC90087A45C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C4234A2546BDC90087A45C /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		D2A848D02470813F00393C2E /* AudioAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAnalyzer.swift; sourceTree = "<group>"; };
 		D2A848D22470857E00393C2E /* PodcastTranscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastTranscriptionView.swift; sourceTree = "<group>"; };
 		D2A848D42470877800393C2E /* AudioSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSegment.swift; sourceTree = "<group>"; };
+		D2C4234A2546BDC90087A45C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = transcribe/Extensions.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +180,7 @@
 				D28E4EA82546A25A000107E6 /* TranscribeApp.swift */,
 				D28E4EAA2546A25B000107E6 /* TranscribeDocument.swift */,
 				D28E4EAC2546A25B000107E6 /* ContentView.swift */,
+				D2C4234A2546BDC90087A45C /* Extensions.swift */,
 				D28E4EAE2546A25B000107E6 /* Assets.xcassets */,
 				D28E4EB32546A25B000107E6 /* Info.plist */,
 				D28E4EB42546A25B000107E6 /* Transcribe.entitlements */,
@@ -323,6 +326,7 @@
 				D28E4EBE2546A2CE000107E6 /* AudioSegment.swift in Sources */,
 				D28E4EA92546A25A000107E6 /* TranscribeApp.swift in Sources */,
 				D28E4EBB2546A2CE000107E6 /* PlaygroundHelper.swift in Sources */,
+				D2C4234B2546BDC90087A45C /* Extensions.swift in Sources */,
 				D28E4EAB2546A25B000107E6 /* TranscribeDocument.swift in Sources */,
 				D28E4EBF2546A2CE000107E6 /* AudioSegmentPlayer.swift in Sources */,
 				D28E4EBC2546A2CE000107E6 /* AudioAnalyzer.swift in Sources */,

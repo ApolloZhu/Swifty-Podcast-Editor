@@ -11,7 +11,7 @@ import Foundation
 /// For generated audio, store information in alternatives and set modified to true.
 /// Set start to -2 and duration to -2 as special flag.
 public struct AudioSegment: Codable, Hashable, Identifiable {
-  public let id = UUID()
+  public private(set) var id = UUID()
   var text: String {
     didSet {
       modified = true

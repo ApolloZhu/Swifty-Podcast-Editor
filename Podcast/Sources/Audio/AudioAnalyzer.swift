@@ -71,14 +71,15 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
   public let fileURL: URL
   private let speechRecognizer: SFSpeechRecognizer!
   
-  public init(analyzing file: URL = defaultAudioURL, loadIfAvailable: Bool = true) {
+  public init(analyzing file: URL = defaultAudioURL, loadIfAvailable: Bool = true,
+              contextualStrings: [String] = []) {
     fileURL = file
     speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
       ?? SFSpeechRecognizer()
     super.init()
     if loadIfAvailable,
-      let previous = get(file.absoluteString, ofType: [AudioSegment].self),
-      !previous.isEmpty {
+       let previous = get(file.absoluteString, ofType: [AudioSegment].self),
+       !previous.isEmpty {
       DispatchQueue.main.async { [weak self] in
         guard let self = self else { return }
         self.segments = previous
@@ -99,6 +100,8 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
       switch authStatus {
       case .authorized, .notDetermined:
         let recognitionRequest = SFSpeechURLRecognitionRequest(url: self.fileURL)
+        recognitionRequest.requiresOnDeviceRecognition = true
+        recognitionRequest.contextualStrings = contextualStrings
         speechRecognizer
           .recognitionTask(with: recognitionRequest,
                            resultHandler: self.handleTranscription)
@@ -109,12 +112,18 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
       }
     }
   }
-  
+
+  private var oldText = ""
+  private var oldResult = [SFTranscriptionSegment]()
+
   private func handleTranscription(result: SFSpeechRecognitionResult?,
                                    error: Error?) {
     if let result = result {
-      if result.isFinal {
-        var transcriptions = result.bestTranscription.segments.enumerated().map {
+      let newText = result.bestTranscription.formattedString
+      let newResult = result.bestTranscription.segments
+      if result.isFinal || (oldResult.count - newResult.count) >= 3 {
+        let results = result.isFinal ? newResult : oldResult
+        var transcriptions = results.enumerated().map {
           index, segment in
           AudioSegment(
             text: segment.substring,
@@ -145,18 +154,21 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
             transcriptions[transcriptions.indices.last!].text += "."
           }
         }
-        segments = transcriptions
+        segments.append(contentsOf: transcriptions)
+      }
+      if result.isFinal {
         setState(.finished)
       } else {
-        // dump(result.bestTranscription.segments)
-        setState(.processing(result.bestTranscription.formattedString))
+        setState(.processing(newText))
       }
+      oldText = newText
+      oldResult = result.bestTranscription.segments
     }
     if let error = error {
       setState(.errored(error))
     }
   }
-  
+
   public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer,
                                availabilityDidChange available: Bool) {
     if !available {

@@ -113,18 +113,13 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
     }
   }
 
-  private var oldText = ""
-  private var oldResult = [SFTranscriptionSegment]()
-
   private func handleTranscription(result: SFSpeechRecognitionResult?,
                                    error: Error?) {
     if let result = result {
-      let newText = result.bestTranscription.formattedString
-      let newResult = result.bestTranscription.segments
-      if result.isFinal || (oldResult.count - newResult.count) >= 3 {
-        let results = result.isFinal ? newResult : oldResult
-        var transcriptions = results.enumerated().map {
-          index, segment in
+      let curSegments = result.bestTranscription.segments
+
+      if result.isFinal || curSegments.last?.timestamp != 0 {
+        var transcriptions = curSegments.enumerated().map { index, segment in
           AudioSegment(
             text: segment.substring,
             alternatives: segment.alternativeSubstrings
@@ -159,10 +154,8 @@ public class AudioAnalyzer: NSObject, ObservableObject, SFSpeechRecognizerDelega
       if result.isFinal {
         setState(.finished)
       } else {
-        setState(.processing(newText))
+        setState(.processing(result.bestTranscription.formattedString))
       }
-      oldText = newText
-      oldResult = result.bestTranscription.segments
     }
     if let error = error {
       setState(.errored(error))
